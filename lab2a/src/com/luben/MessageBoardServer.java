@@ -3,14 +3,17 @@ package com.luben;
 /**
  * Created by Julia on 2015-10-07.
  */
-import java.net.*;
-import java.rmi.*;
+
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+
 
 public class MessageBoardServer {
 
     public static void main(String[] args)  {
 
         try {
+            //LocateRegistry.createRegistry(1742);
             MessageBoardImpl board = new MessageBoardImpl();
             Naming.rebind("message_board", board);  // set the handle
 
