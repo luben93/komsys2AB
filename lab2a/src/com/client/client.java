@@ -11,24 +11,49 @@ import java.util.Scanner;
  * Created by luben on 2015-10-07.
  */
 
-public class client extends UnicastRemoteObject implements note{
+public class client extends UnicastRemoteObject implements note {
     private MessageBoard board;
 
-    public  client(MessageBoard board)throws RemoteException{
+    public client(MessageBoard board) throws RemoteException {
         super();
         System.out.println("I AM CLIEEENT !!!!!!");
-        this.board=board;
+        this.board = board;
 
     }
-         public void proto(){
 
-             try {
+    public void proto() {
 
-                 Scanner scan = new Scanner(System.in);
-                 char ans;
-                 do {
-                     System.out.println("1 Show last 2 Show all 3 Put msg 0 Exit");
-                     ans = scan.nextLine().charAt(0);
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            char ans;
+            String msg = "";
+            do {
+                //System.out.println(board.recvMessage());
+                //  ans = scan.nextLine().charAt(0);
+                System.out.print(">");
+                msg = scan.nextLine();
+                if (msg.startsWith("/")) {
+                    switch (msg) {
+                        case "/help":
+                            board.help(this);
+                            break;
+                        case "/who":
+                            board.who(this);
+                            break;
+                        //case "/nick ": board.nick(this,msg.substring(6));break;
+                        case "/quit":
+                            break;
+                        default:
+                            if (msg.startsWith("/nick ")) {
+                                board.nick(this, msg.substring(6));
+                            }
+                            break;
+                    }
+                } else {
+                    board.putMessage(msg);
+                }
+                     /*
                      switch(ans) {
                          case '1': System.out.println(board.getLast()); break;
                          case '2': System.out.println(board.getAll()); break;
@@ -39,22 +64,34 @@ public class client extends UnicastRemoteObject implements note{
                          case '0': break;
                          default: System.out.println("Huh?");
                      }
+                     */
 
-                 } while(ans != '0');
+            } while (!msg.equals("/quit"));
 
-                 System.out.println("Client exits.");
-                 board.deRegister(this);
-                 System.exit(0);
-             }
-             catch(Exception e) {
-                 e.printStackTrace();
-             }
-         }
+            System.out.println("Client exits.");
+            board.deRegister(this);
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
     public void notifyMsg(String msg) throws RemoteException {
-        System.out.println("out"+msg);
+        System.out.println("\n<" + msg);
+
     }
 
+    private String nick = "user";
+
+    @Override
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    @Override
+    public String getNick() {
+        return nick;
+    }
 }

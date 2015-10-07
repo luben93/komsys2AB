@@ -8,4 +8,6 @@ import java.rmi.RemoteException;
  */
 public interface note extends Remote {
     public void notifyMsg(String msg) throws RemoteException;
+    public void setNick(String nick) throws RemoteException;
+    public String getNick() throws RemoteException;
 }
