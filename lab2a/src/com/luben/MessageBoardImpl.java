@@ -10,6 +10,7 @@ package com.luben;
 import com.inter.MessageBoard;
 import com.inter.note;
 
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
     private ArrayList<note> clients;
 
     public MessageBoardImpl() throws RemoteException {
+
         super();
         clients = new ArrayList<note>();
         messages = new ArrayList<String>();
@@ -36,24 +38,7 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
             clients.get(i).notifyMsg(msg);
         }
     }
-/*
-    synchronized public String putMessage(String msg, note currentClient) throws RemoteException {
-        String out = "";
-        messages.add(msg);
-        if (msg.startsWith("/nick")) {
-            return msg;
-        } else if (msg.equals("/quit")) {
-            //TODO sockettimeout
-        } else if (msg.equals("/who")) {
 
-        } else if (msg.equals("/help")||msg.startsWith("/")) {
-            out = "you can write:\n /quit \n /who \n /nick <nickname> \n /help\n or send a message";
-        } else {
-            sendToAll(msg);
-        }
-        return out;
-    }
-*/
 
     @Override
     public void putMessage(String msg) throws RemoteException {
@@ -64,7 +49,8 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
     public void who(note n) throws RemoteException {
         StringBuilder out=new StringBuilder(100);
         for(note cli :clients){
-            out.append(cli.getNick()+", ");
+            out.append(cli.getNick());
+            out.append(", ");
         }
         n.notifyMsg(out.toString());
     }
@@ -88,6 +74,7 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
     synchronized public int Register(note n) throws RemoteException {
         clients.add(n);
         System.out.println("addededededded: " + n);
+        n.notifyMsg("wolcome comrad");
         return clients.size();
     }
 
@@ -101,5 +88,16 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
     @Override
     public String recvMessage() throws RemoteException {
         return "Welcome";
+    }
+
+    @Override
+    synchronized public void checkConnected() throws RemoteException {
+        for(note cli:clients) {
+            try {
+                cli.notifyMsg("are you alive?");
+            } catch (ConnectException e) {
+                clients.remove(cli);
+            }
+        }
     }
 }

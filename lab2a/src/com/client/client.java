@@ -4,6 +4,7 @@ import com.inter.MessageBoard;
 import com.inter.note;
 
 import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
@@ -21,7 +22,7 @@ public class client extends UnicastRemoteObject implements note {
 
     }
 
-    public void proto() {
+    public void proto() throws RemoteException {
 
         try {
 
@@ -29,6 +30,7 @@ public class client extends UnicastRemoteObject implements note {
             char ans;
             String msg = "";
             do {
+                try {
                 //System.out.println(board.recvMessage());
                 //  ans = scan.nextLine().charAt(0);
                 System.out.print(">");
@@ -65,14 +67,21 @@ public class client extends UnicastRemoteObject implements note {
                          default: System.out.println("Huh?");
                      }
                      */
-
+            } catch (ServerException e2){
+                System.out.println("Lucas ska göra serverutv med jullan nu");
+                e2.printStackTrace();
+                board.checkConnected();
+                System.out.println("its dead jim, ITS DEAD ");
+                }
             } while (!msg.equals("/quit"));
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
             System.out.println("Client exits.");
             board.deRegister(this);
             System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

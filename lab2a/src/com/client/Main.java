@@ -15,20 +15,28 @@ public class Main {
         String server="130.229.174.158";//julias ip
         server="localhost";
         MessageBoard board = null;
+        client cli=null;
+        int err=0;
         try {
             board = (MessageBoard)
                     Naming.lookup("rmi://" + server + "/message_board");
-            client cli=new client(board);
+            cli=new client(board);
             int out=board.Register(cli);
-            System.out.println("n: "+out);
+            System.out.println(out+" active connections");
             cli.proto();
 
         } catch (NotBoundException e) {
             e.printStackTrace();
+            err=-1;
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            err=-2;
         } catch (RemoteException e) {
             e.printStackTrace();
+            err = -3;
+        }finally {
+            System.exit(err);
         }
+
     }
 }
