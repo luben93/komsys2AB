@@ -1,5 +1,8 @@
 package SIP;
 
+import SIP.Server.State;
+import SIP.Server.StateWaiting;
+
 /**
  * Created by Julia on 2015-10-13.
  */

@@ -1,4 +1,6 @@
-package SIP;
+package SIP.Server;
+
+import SIP.SIPHandler;
 
 /**
  * Created by Julia on 2015-10-13.

@@ -19,9 +19,9 @@ public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
-        Interface i = new Interface();
-        i.run();
-
+        Runnable interface_client = new Interface();
+        Thread t = new Thread(interface_client);
+        t.start();
 
         ServerSocket serverSocket = null;
         try {
