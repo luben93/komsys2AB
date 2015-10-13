@@ -4,6 +4,8 @@ package start;
  * Created by Julia on 2015-10-12.
  */
 
+import SIP.SIPHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,8 +13,6 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-
-import SIP.SIPHandler;
 
 public class main {
     public static void main(String[] args) {
@@ -55,33 +55,15 @@ public class main {
 
                     switch (choice) {
                         case 1:
-                            if (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {
-                                sh.invokeReceivedInvite();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedInvite(sh.getState()); break;
                         case 2:
-                            if (sh.getState().equals(SIPHandler.StateEvent.RINGING)) {
-                                sh.invokeReceivedCall();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedCall(sh.getState()); break;
                         case 3:
-                            if (sh.getState().equals(SIPHandler.StateEvent.INSESSION)) {
-                                sh.invokeReceivedEndCall();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedEndCall(sh.getState()); break;
                         case 4:
-                            if (sh.getState().equals(SIPHandler.StateEvent.CLOSING)) {
-                                sh.invokeReceivedBye();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedBye(sh.getState()); break;
+                        default:
+                            out.println(sh.errorExit()); break;
                     }
                 } while (choice != 0);
             } catch (IOException e) {
