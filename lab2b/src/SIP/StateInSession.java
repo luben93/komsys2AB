@@ -1,9 +1,11 @@
+package SIP;
+
 /**
  * Created by Julia on 2015-10-13.
  */
-public class StateClosing extends State{
+public class StateInSession extends State{
     @Override
     public SIPHandler.StateEvent getStateName() {
-        return SIPHandler.StateEvent.CLOSING;
+        return SIPHandler.StateEvent.INSESSION;
     }
 }
