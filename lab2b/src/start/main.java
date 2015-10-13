@@ -58,33 +58,15 @@ public class main {
 
                     switch (choice) {
                         case 1:
-                            if (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {
-                                sh.invokeReceivedInvite();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedInvite(sh.getState()); break;
                         case 2:
-                            if (sh.getState().equals(SIPHandler.StateEvent.RINGING)) {
-                                sh.invokeReceivedCall();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedCall(sh.getState()); break;
                         case 3:
-                            if (sh.getState().equals(SIPHandler.StateEvent.INSESSION)) {
-                                sh.invokeReceivedEndCall();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedEndCall(sh.getState()); break;
                         case 4:
-                            if (sh.getState().equals(SIPHandler.StateEvent.CLOSING)) {
-                                sh.invokeReceivedBye();
-                            } else {
-                                out.println("ERROR 418");
-                            }
-                            break;
+                            sh.invokeReceivedBye(sh.getState()); break;
+                        default:
+                            out.println(sh.errorExit()); break;
                     }
                 } while (choice != 0);
             } catch (IOException e) {

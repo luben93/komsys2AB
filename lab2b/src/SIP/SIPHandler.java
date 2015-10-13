@@ -6,7 +6,6 @@ package SIP;
 public class SIPHandler {
     public enum StateEvent {WAITING, RINGING, INSESSION, CLOSING}
 
-    ;
 
     private State currentState;
 
@@ -18,20 +17,45 @@ public class SIPHandler {
         return currentState.getStateName();
     }
 
-    public void invokeReceivedInvite() {
-        currentState = currentState.receivedInvite();
+    public String invokeReceivedInvite(StateEvent s) {
+        if(s.equals(StateEvent.WAITING)) {
+            currentState = currentState.receivedInvite();
+            return "100 trying";
+        }
+        return errorExit();
+
     }
 
-    public void invokeReceivedBye() {
-        currentState = currentState.receivedBye();
+    public String invokeReceivedBye(StateEvent s) {
+        if(s.equals(StateEvent.RINGING)) {
+            currentState = currentState.receivedBye();
+            return "180 ringing";
+        }
+        return errorExit();
+
     }
 
-    public void invokeReceivedCall() {
-        currentState = currentState.receivedCall();
+    public String invokeReceivedCall(StateEvent s) {
+        if (s.equals(StateEvent.INSESSION)) {
+            currentState = currentState.receivedCall();
+            return "200 OK";
+        }
+        return errorExit();
+
     }
 
-    public void invokeReceivedEndCall() {
-        currentState = currentState.receivedEndCall();
+    public String invokeReceivedEndCall(StateEvent s) {
+        if (s.equals(StateEvent.CLOSING)) {
+            currentState = currentState.receivedEndCall();
+            return "ACK bye";
+        }
+        return errorExit();
+
+    }
+
+    public String errorExit(){
+        currentState=currentState.receivedBye();
+        return "418 i'm a teapot";
     }
 
 }
