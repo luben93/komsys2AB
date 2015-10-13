@@ -1,8 +1,6 @@
- //TODO: package
-
- import java.util.Scanner;
-
- /**
+package start;
+//TODO: package
+/**
  * Created by Julia on 2015-10-12.
  */
 public class main {
