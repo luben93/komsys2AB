@@ -4,8 +4,6 @@ package start;
  * Created by Julia on 2015-10-12.
  */
 
-import SIP.SIPHandler;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,11 +12,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+import SIP.Interface;
+import SIP.SIPHandler;
+
 public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
-        Scanner scan = new Scanner(System.in);
+        Interface i = new Interface();
+        i.run();
+
 
         ServerSocket serverSocket = null;
         try {
