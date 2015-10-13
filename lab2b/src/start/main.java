@@ -12,13 +12,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+import SIP.Interface;
 import SIP.SIPHandler;
 
 public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
-        Scanner scan = new Scanner(System.in);
+        Interface i = new Interface();
+        i.run();
+
 
         ServerSocket serverSocket = null;
         try {
