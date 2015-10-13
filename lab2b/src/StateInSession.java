@@ -6,4 +6,9 @@ public class StateInSession extends State{
     public SIPHandler.StateEvent getStateName() {
         return SIPHandler.StateEvent.INSESSION;
     }
+
+    @Override
+    public State receivedEndCall() {
+        return new StateClosing();
+    }
 }

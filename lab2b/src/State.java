@@ -4,6 +4,10 @@
 public abstract class State {
     public abstract SIPHandler.StateEvent getStateName();
 
+    public State receivedBye() {
+        return this;
+    }
+
     public State receivedInvite() {
         return this;
     }
@@ -15,5 +19,7 @@ public abstract class State {
     public State receivedEndCall() {
         return this;
     }
+
+
 
 }

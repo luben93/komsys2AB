@@ -6,4 +6,9 @@ public class StateRinging extends State{
     public SIPHandler.StateEvent getStateName() {
         return SIPHandler.StateEvent.RINGING;
     }
+
+    @Override
+    public State receivedCall() {
+        return new StateInSession();
+    }
 }

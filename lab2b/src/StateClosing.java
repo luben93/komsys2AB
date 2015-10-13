@@ -6,4 +6,9 @@ public class StateClosing extends State{
     public SIPHandler.StateEvent getStateName() {
         return SIPHandler.StateEvent.CLOSING;
     }
+
+    @Override
+    public State receivedBye() {
+        return new StateWaiting();
+    }
 }
