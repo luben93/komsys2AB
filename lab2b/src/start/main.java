@@ -4,20 +4,15 @@ package start;
  * Created by Julia on 2015-10-12.
  */
 
-import java.io.BufferedReader;
+import SIP.Interface;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
-
-import SIP.Interface;
-import SIP.SIPHandler;
 
 public class main {
     public static void main(String[] args) {
-        SIPHandler sh = new SIPHandler();
+//        SIPHandler sh = new SIPHandler();
         int choice = -1;
         Runnable interface_client = new Interface();
         Thread t = new Thread(interface_client);
@@ -31,13 +26,16 @@ public class main {
             System.exit(1);
         }
         Socket clientSocket = null;
-        System.out.println("Waiting for connection.....");
-        PrintWriter out = null;
-        BufferedReader in = null;
+        //System.out.println("Waiting for connection.....");
+       // PrintWriter out = null;
+        //BufferedReader in = null;
         while (true) {
-
+            String output = "error 418";
             try {
                 clientSocket = serverSocket.accept();
+                SIPthread trad=new SIPthread(clientSocket);
+                trad.start();
+               /*
                 try {
                     out = new PrintWriter(clientSocket.getOutputStream(), true);
                     in = new BufferedReader(
@@ -45,32 +43,43 @@ public class main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                do {
-                    System.out.println("State: " + sh.getState());
-                    System.out.println("0. Quit");
-                    System.out.println("1. Call");
-                    System.out.println("2. Pick up");
-                    System.out.println("3. Hang up");
-                    System.out.println("4. Accept up");
-                    String input;
-                    input = in.readLine();
-                    choice = Integer.parseInt(input);
+                if (sh.getState() != SIPHandler.StateEvent.INSESSION) {
 
-                    switch (choice) {
-                        case 1:
-                            sh.invokeReceivedInvite(sh.getState()); break;
-                        case 2:
-                            sh.invokeReceivedCall(sh.getState()); break;
-                        case 3:
-                            sh.invokeReceivedEndCall(sh.getState()); break;
-                        case 4:
-                            sh.invokeReceivedBye(sh.getState()); break;
-                        default:
-                            out.println(sh.errorExit()); break;
-                    }
-                } while (choice != 0);
+                    do {
+                        System.out.println("State: " + sh.getState());
+                        System.out.println("0. Quit");
+                        System.out.println("1. Call");
+                        System.out.println("2. Pick up");
+                        System.out.println("3. Hang up");
+                        System.out.println("4. Accept up");
+                        String input;
+                        input = in.readLine();
+                        choice = Integer.parseInt(input);
+                        switch (choice) {
+                            case 1:
+                                output = sh.invokeReceivedInvite();
+                                break;
+                            case 2:
+                                output = sh.invokeReceivedCall();
+                                break;
+                            case 3:
+                                output = sh.invokeReceivedEndCall();
+                                break;
+                            case 4:
+                                output = sh.invokeReceivedBye();
+                                break;
+                            default:
+                                output = sh.errorExit();
+                                break;
+                        }
+
+                    } while (choice != 0);
+                }*/
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                //out.println(output);
+
             }
 
 

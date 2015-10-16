@@ -1,8 +1,8 @@
 package SIP;
 
-import java.util.Scanner;
-
 import SIP.Client.ClientHandler;
+
+import java.util.Scanner;
 
 /**
  * Created by Julia on 2015-10-13.
