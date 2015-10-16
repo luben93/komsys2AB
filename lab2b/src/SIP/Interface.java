@@ -12,8 +12,10 @@ import java.util.Scanner;
  * Created by Julia on 2015-10-13.
  */
 public class Interface extends Thread {
-    public Interface() {
+    private SIPHandler sh;
 
+    public Interface(SIPHandler sh) {
+        this.sh = sh;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class Interface extends Thread {
 
                     try {
                         Socket s = new Socket(invite_msg, 1234);
-                        SIPthread trad = new SIPthread(s, false);
+                        SIPthread trad = new SIPthread(s, false, sh);
                         trad.start();
                         //TODO: gör en loop här tills man skrivit in rätt eller avbryter
                     } catch (UnknownHostException e) {

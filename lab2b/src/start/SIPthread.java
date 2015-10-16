@@ -17,9 +17,9 @@ public class SIPthread extends Thread {
     SIPHandler sh;
 
 
-    public SIPthread(Socket socket,boolean isServer) throws IOException{
+    public SIPthread(Socket socket,boolean isServer,SIPHandler sh) throws IOException{
         this.socket = socket;
-        sh = new SIPHandler();
+        this.sh = sh;
         this.isServer=isServer;
     }
 
@@ -39,6 +39,7 @@ public class SIPthread extends Thread {
         PrintWriter out = null;
         BufferedReader in = null;
         String output = "BUSY";
+        System.out.println("starting server at port: "+socket.getPort());
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(
@@ -65,11 +66,14 @@ public class SIPthread extends Thread {
                         break;
                 }*/
                     if (choice.contains("INVITE")) {
-                        output = sh.invokeReceivedInvite();
+                       out.println(sh.invokeReceivedInvite());
+                        //TODO new audio thread here
+                        out.println(sh.invokeReceivedCall());
+                        out.println("200 OK");//TODO cast from audio thread and state
                     }
 
                 }
-                out.println(output);
+                //out.println(output);
             }
         } catch (IOException e) {
             e.printStackTrace();

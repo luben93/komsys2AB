@@ -23,7 +23,7 @@ public class SIPHandler {
     public String invokeReceivedInvite() {
         if(getState().equals(StateEvent.WAITING)) {
             currentState = currentState.receivedInvite();
-            return "100 trying";
+            return "100 TRYING";
             //TODO start new audio thread here
         }
         return errorExit();
@@ -33,7 +33,7 @@ public class SIPHandler {
     public String invokeReceivedBye() {
         if(getState().equals(StateEvent.RINGING)) {
             currentState = currentState.receivedBye();
-            return "180 ringing";
+            return "200 OK";
             //TODO call from audio thread here
         }
         return errorExit();
@@ -43,7 +43,9 @@ public class SIPHandler {
     public String invokeReceivedCall() {
         if (getState().equals(StateEvent.INSESSION)) {
             currentState = currentState.receivedCall();
-            return "200 OK";
+
+            return "180 RINGING";
+
             //i dont even
         }
         return errorExit();
@@ -53,7 +55,7 @@ public class SIPHandler {
     public String invokeReceivedEndCall() {
         if (getState().equals(StateEvent.CLOSING)) {
             currentState = currentState.receivedEndCall();
-            return "ACK bye";
+            return "BYE";
             //TODO close audio thread
         }
         return errorExit();
