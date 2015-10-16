@@ -1,7 +1,11 @@
 package SIP;
 
 import SIP.Client.ClientHandler;
+import start.SIPthread;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -33,11 +37,20 @@ public class Interface extends Thread {
                     showMessage("Write which ip you want to call.");
                     String invite_msg = scanner.nextLine();
 
+                    try {
+                        Socket s = new Socket(invite_msg, 1234);
+                        SIPthread trad = new SIPthread(s, false);
+                        trad.start();
+                        //TODO: gör en loop här tills man skrivit in rätt eller avbryter
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 2:
                     ch.invokeSentBye(ch.getState());
                     break;
-
             }
         } while (choice != 0);
         System.exit(0);
