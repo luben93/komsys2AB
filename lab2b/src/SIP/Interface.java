@@ -21,36 +21,48 @@ public class Interface extends Thread {
         int choice = -1;
         ClientHandler ch = new ClientHandler();
         Scanner scanner = new Scanner(System.in);
+        boolean call = false;
         do {
             //
-            showMessage("State: " + ch.getState());
             showMessage("0. Quit");
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             showMessage("1. Call");
+            if(call){
+                showMessage("2. Hang upp");
+            }
             //TODO: sent bye
             String sentence = scanner.nextLine();
-            choice = Integer.parseInt(sentence);
-            switch (choice) {
-                case 1:
-                    showMessage("2. Hang upp");
-                    ch.invokeSentInvite(ch.getState());
-                    showMessage("Write which ip you want to call.");
-                    String invite_msg = scanner.nextLine();
+            try {
+                choice = Integer.parseInt(sentence);
+                switch (choice) {
+                    case 1:
+                        showMessage("Write which ip you want to call.");
+                        String invite_msg = scanner.nextLine();
+                        try {
+                            Socket s = new Socket(invite_msg, 4321);
+                            SIPthread trad = new SIPthread(s, false);
+                            trad.start();
+                            showMessage("Calling ... ");
+                            ch.invokeSentInvite(ch.getState());
+                            call = true;
+                        } catch (UnknownHostException e) {
+                            showMessage("The ip you entered is not correct");
+                            //  e.printStackTrace();
+                        } catch (IOException e) {
+                            showMessage("Could not connect to the ip adress");
+                            //e.printStackTrace();
+                        }
+                        break;
+                    case 2:
+                        if(call){
+                            ch.invokeSentBye(ch.getState());
+                            call = false;
+                        }
 
-                    try {
-                        Socket s = new Socket(invite_msg, 1234);
-                        SIPthread trad = new SIPthread(s, false);
-                        trad.start();
-                        //TODO: gör en loop här tills man skrivit in rätt eller avbryter
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    ch.invokeSentBye(ch.getState());
-                    break;
+                        break;
+                }
+            }catch (NumberFormatException e){
+                showMessage("You have to write 1 or 2");
             }
         } while (choice != 0);
         System.exit(0);
