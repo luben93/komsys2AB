@@ -15,7 +15,7 @@ public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
-        Runnable interface_client = new Interface();
+        Runnable interface_client = new Interface(sh);
         Thread t = new Thread(interface_client);
         t.start();
 

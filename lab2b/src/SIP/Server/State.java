@@ -8,22 +8,28 @@ import SIP.SIPHandler;
 public abstract class State {
     public abstract SIPHandler.StateEvent getStateName();
 
-    public State receivedBye() {
+    public State toDial() {
         return this;
     }
 
-    public State receivedInvite() {
+    public State toAnswer(String msg) {
         return this;
     }
 
-    public State receivedCall() {
+    public State toTalk(String msg) {
         return this;
     }
 
-    public State receivedEndCall() {
+    public State toHangUp() {
         return this;
     }
 
+    public State toWait(String msg) {
+        return this;
+    }
 
+    public State toWait() {
+        return this;
+    }
 
 }

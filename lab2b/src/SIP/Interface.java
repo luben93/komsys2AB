@@ -1,8 +1,6 @@
 package SIP;
 
-import SIP.Client.ClientHandler;
 import start.SIPthread;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -21,16 +19,14 @@ public class Interface extends Thread {
     @Override
     public void run() {
         int choice = -1;
-        ClientHandler ch = new ClientHandler();
         Scanner scanner = new Scanner(System.in);
         boolean call = false;
         do {
             //
-            showMessage("State: " + ch.getState());
             showMessage("0. Quit");
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             showMessage("1. Call");
-            if(call){
+            if (call) {
                 showMessage("2. Hang upp");
             }
             //TODO: sent bye
@@ -43,10 +39,10 @@ public class Interface extends Thread {
                         String invite_msg = scanner.nextLine();
                         try {
                             Socket s = new Socket(invite_msg, 4321);
-                            SIPthread trad = new SIPthread(s, false);
+                            SIPthread trad = new SIPthread(s, false, sh);
                             trad.start();
                             showMessage("Calling ... ");
-                            ch.invokeSentInvite(ch.getState());
+                           // sh.invokeReceivedInvite();
                             call = true;
                         } catch (UnknownHostException e) {
                             showMessage("The ip you entered is not correct");
@@ -57,28 +53,13 @@ public class Interface extends Thread {
                         }
                         break;
                     case 2:
-                        if(call){
-                            ch.invokeSentBye(ch.getState());
+                        if (call) {
+                            //sh.invokeReceivedEndCall();
                             call = false;
                         }
-
-                    try {
-                        Socket s = new Socket(invite_msg, 1234);
-                        SIPthread trad = new SIPthread(s, false, sh);
-                        trad.start();
-                        //TODO: gör en loop här tills man skrivit in rätt eller avbryter
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2:
-                    ch.invokeSentBye(ch.getState());
-                    break;
-                     
+                        break;
                 }
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 showMessage("You have to write 1 or 2");
             }
         } while (choice != 0);

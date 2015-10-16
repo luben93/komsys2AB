@@ -39,11 +39,13 @@ public class SIPthread extends Thread {
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
             out.println("INVITE");
-            System.out.println("input: " + in.readLine());
             boolean tryingToStartCall = true;
             while (tryingToStartCall) {
                 try {
-                    if (in.readLine().equals("100 TRYING")) {
+                    System.out.println(in.readLine());
+                    System.out.println(in.readLine());
+                    System.out.println(in.readLine());
+                   /* if (in.readLine().equals("100 TRYING")) {
                         if (in.readLine().equals("180 RINGING")) {
                             if (in.readLine().equals("200 OK")) {
                                 System.out.println("it worked!!!");
@@ -51,7 +53,7 @@ public class SIPthread extends Thread {
                                 tryingToStartCall = false;
                             }
                         }
-                    }
+                    }*/
                 }catch (NumberFormatException e){
                     e.getMessage();
                 }
@@ -91,9 +93,9 @@ public class SIPthread extends Thread {
                         break;
                 }*/
                     if (choice.contains("INVITE")) {
-                       out.println(sh.invokeReceivedInvite());
+                    //   out.println(sh.invokeReceivedInvite());
                         //TODO new audio thread here
-                        out.println(sh.invokeReceivedCall());
+                      //  out.println(sh.invokeReceivedCall());
                         out.println("200 OK");//TODO cast from audio thread and state
                     }
 
