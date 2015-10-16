@@ -5,6 +5,7 @@ package start;
  */
 
 import SIP.Interface;
+import SIP.SIPHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,7 +13,7 @@ import java.net.Socket;
 
 public class main {
     public static void main(String[] args) {
-//        SIPHandler sh = new SIPHandler();
+        SIPHandler sh = new SIPHandler();
         int choice = -1;
         Runnable interface_client = new Interface();
         Thread t = new Thread(interface_client);
@@ -20,21 +21,23 @@ public class main {
 
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(1234);
+            serverSocket = new ServerSocket(4321);
         } catch (IOException e) {
-            System.err.println("Could not listen on port: " + 1234);
+            System.err.println("Could not listen on port: " + 4321);
             System.exit(1);
         }
         Socket clientSocket = null;
-        //System.out.println("Waiting for connection.....");
+        System.out.println("Waiting for connection.....");
        // PrintWriter out = null;
         //BufferedReader in = null;
         while (true) {
             String output = "error 418";
             try {
+
                 clientSocket = serverSocket.accept();
-                SIPthread trad=new SIPthread(clientSocket,true);
+                SIPthread trad=new SIPthread(clientSocket,true,sh);
                 trad.start();
+                System.out.println("thread started");
                /*
                 try {
                     out = new PrintWriter(clientSocket.getOutputStream(), true);
