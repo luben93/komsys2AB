@@ -33,7 +33,7 @@ public class main {
             String output = "error 418";
             try {
                 clientSocket = serverSocket.accept();
-                SIPthread trad=new SIPthread(clientSocket);
+                SIPthread trad=new SIPthread(clientSocket,true);
                 trad.start();
                /*
                 try {

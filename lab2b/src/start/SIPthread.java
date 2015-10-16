@@ -39,10 +39,10 @@ public class SIPthread extends Thread {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-
-            if (sh.getState() == SIPHandler.StateEvent.WAITING) {
-                String choice = in.readLine();
-                switch (choice) {
+            while (true) {
+                if (sh.getState() == SIPHandler.StateEvent.WAITING) {
+                    String choice = in.readLine();
+                /*switch (choice) {
                     case "INVITE":
                         output = sh.invokeReceivedInvite();
                         break;
@@ -58,9 +58,14 @@ public class SIPthread extends Thread {
                     default:
                         output = sh.errorExit();
                         break;
+                }*/
+                    if (choice.contains("INVITE")) {
+                        output = sh.invokeReceivedInvite();
+                    }
+
                 }
+                out.println(output);
             }
-            out.println(output);
         } catch (IOException e) {
             e.printStackTrace();
         }
