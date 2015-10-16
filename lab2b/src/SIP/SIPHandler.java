@@ -20,8 +20,8 @@ public class SIPHandler {
         return currentState.getStateName();
     }
 
-    public String invokeReceivedInvite(StateEvent s) {
-        if(s.equals(StateEvent.WAITING)) {
+    public String invokeReceivedInvite() {
+        if(getState().equals(StateEvent.WAITING)) {
             currentState = currentState.receivedInvite();
             return "100 trying";
             //TODO start new audio thread here
@@ -30,8 +30,8 @@ public class SIPHandler {
 
     }
 
-    public String invokeReceivedBye(StateEvent s) {
-        if(s.equals(StateEvent.RINGING)) {
+    public String invokeReceivedBye() {
+        if(getState().equals(StateEvent.RINGING)) {
             currentState = currentState.receivedBye();
             return "180 ringing";
             //TODO call from audio thread here
@@ -40,8 +40,8 @@ public class SIPHandler {
 
     }
 
-    public String invokeReceivedCall(StateEvent s) {
-        if (s.equals(StateEvent.INSESSION)) {
+    public String invokeReceivedCall() {
+        if (getState().equals(StateEvent.INSESSION)) {
             currentState = currentState.receivedCall();
             return "200 OK";
             //i dont even
@@ -50,8 +50,8 @@ public class SIPHandler {
 
     }
 
-    public String invokeReceivedEndCall(StateEvent s) {
-        if (s.equals(StateEvent.CLOSING)) {
+    public String invokeReceivedEndCall() {
+        if (getState().equals(StateEvent.CLOSING)) {
             currentState = currentState.receivedEndCall();
             return "ACK bye";
             //TODO close audio thread
