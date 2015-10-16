@@ -29,6 +29,7 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
 
         super();
         clients = new ArrayList<note>();
+
         messages = new ArrayList<String>();
 
     }
@@ -47,8 +48,8 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
 
     @Override
     public void who(note n) throws RemoteException {
-        StringBuilder out=new StringBuilder(100);
-        for(note cli :clients){
+        StringBuilder out = new StringBuilder(100);
+        for (note cli : clients) {
             out.append(cli.getNick());
             out.append(", ");
         }
@@ -91,13 +92,21 @@ public class MessageBoardImpl extends UnicastRemoteObject implements MessageBoar
     }
 
     @Override
-    synchronized public void checkConnected() throws RemoteException {
-        for(note cli:clients) {
-            try {
-                cli.notifyMsg("are you alive?");
-            } catch (ConnectException e) {
-                clients.remove(cli);
+     public synchronized void checkConnected() throws RemoteException {
+        synchronized (clients) {
+            note lost=null;
+            for (note cli : clients) {
+                try {
+                    cli.notifyMsg("a person has left the chatroom");
+                } catch (ConnectException e) {
+                   // clients.remove(cli);
+                     lost =cli;
+                } //catch (ConcurrentModificationException syncro){
+
+                //}
             }
+            clients.remove(lost);
+
         }
     }
 }

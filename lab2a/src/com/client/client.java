@@ -68,16 +68,16 @@ public class client extends UnicastRemoteObject implements note {
                      }
                      */
             } catch (ServerException e2){
-                System.out.println("Lucas ska göra serverutv med jullan nu");
-                e2.printStackTrace();
+                //System.out.println("Lucas ska göra serverutv med jullan nu");
+                //e2.printStackTrace();
                 board.checkConnected();
-                System.out.println("its dead jim, ITS DEAD ");
+                //System.out.println("its dead jim, ITS DEAD ");
                 }
             } while (!msg.equals("/quit"));
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }finally {
             System.out.println("Client exits.");
             board.deRegister(this);
@@ -87,7 +87,7 @@ public class client extends UnicastRemoteObject implements note {
 
 
     @Override
-    public void notifyMsg(String msg) throws RemoteException {
+    synchronized public void notifyMsg(String msg) throws RemoteException {
         System.out.println("\n<" + msg);
 
     }
