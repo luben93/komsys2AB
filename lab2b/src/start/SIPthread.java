@@ -25,10 +25,14 @@ public class SIPthread extends Thread {
 
     public void run() {
         if (isServer) {
-        start();
+            server();
         }else {
-            //TODO start client protcol here
+            client();
         }
+    }
+
+    private void client(){
+        //TODO start client protcol here
     }
 
     private void server(){
@@ -40,8 +44,9 @@ public class SIPthread extends Thread {
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
             while (true) {
+                String choice = in.readLine();
                 if (sh.getState() == SIPHandler.StateEvent.WAITING) {
-                    String choice = in.readLine();
+
                 /*switch (choice) {
                     case "INVITE":
                         output = sh.invokeReceivedInvite();
