@@ -17,25 +17,51 @@ public class SIPthread extends Thread {
     SIPHandler sh;
 
 
-    public SIPthread(Socket socket,boolean isServer) throws IOException{
+    public SIPthread(Socket socket, boolean isServer) throws IOException {
         this.socket = socket;
         sh = new SIPHandler();
-        this.isServer=isServer;
+        this.isServer = isServer;
     }
 
     public void run() {
         if (isServer) {
             server();
-        }else {
+        } else {
             client();
         }
     }
 
-    private void client(){
-        //TODO start client protcol here
+    private void client() {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        try {
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+            out.println("INVITE");
+            System.out.println("input: " + in.readLine());
+            boolean tryingToStartCall = true;
+            while (tryingToStartCall) {
+                try {
+                    if (in.readLine().equals("100 TRYING")) {
+                        if (in.readLine().equals("180 RINGING")) {
+                            if (in.readLine().equals("200 OK")) {
+                                System.out.println("it worked!!!");
+                                out.println("ACK");
+                                tryingToStartCall = false;
+                            }
+                        }
+                    }
+                }catch (NumberFormatException e){
+                    e.getMessage();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void server(){
+    private void server() {
         PrintWriter out = null;
         BufferedReader in = null;
         String output = "BUSY";
