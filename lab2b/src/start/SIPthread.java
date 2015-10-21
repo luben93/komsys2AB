@@ -59,7 +59,7 @@ public class SIPthread extends Thread {
     public void call() throws Exception {
 
         //while (true) {//???? or something else
-            msg=in.readLine();
+        face.showMessage( msg=in.readLine());
             switch (sh.getState()){
                 case WAITING:
                     //TODO start audio here, and get port number, using 57654 for now
@@ -68,12 +68,13 @@ public class SIPthread extends Thread {
                     sh.outgoingCall();
                     break;
                 case DIALING:
+
                     if (msg.contains("100 TRYING")) {
                         int port=Integer.parseInt(msg.substring(11));
                         //TODO connect to port
-                        msg=in.readLine();
+                        face.showMessage( msg=in.readLine());
                         if (msg.equals("180 RINGING")) {
-                            msg=in.readLine();
+                            face.showMessage( msg=in.readLine());
                             if (msg.equals("200 OK")) {
                                 face.showMessage("it worked!!!");
                                 sh.callAccepted("TRO");
