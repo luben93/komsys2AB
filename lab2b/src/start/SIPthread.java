@@ -14,10 +14,10 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private boolean isServer;
-    private PrintWriter out = null;
-    private BufferedReader in = null;
+    private PrintWriter out ;
+    private BufferedReader in ;
     private SIPHandler sh;
-    private String msg = "";
+    private String msg;
     private Interface face;
 
 
