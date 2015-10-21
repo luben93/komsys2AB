@@ -15,7 +15,6 @@ public class main {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
         Interface interface_client = new Interface(sh);
-        //Thread t = new Thread(interface_client);
         interface_client.start();
 
         ServerSocket serverSocket = null;

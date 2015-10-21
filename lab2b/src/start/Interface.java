@@ -23,6 +23,7 @@ public class Interface extends Thread {
         Scanner scanner = new Scanner(System.in);
         Socket s=null;
         SIPthread trad=null;
+        String ip="";
        // boolean call = false;
         do {
             //TODO should be checking current state
@@ -39,9 +40,13 @@ public class Interface extends Thread {
                     break;
             }
             //TODO: sent bye
-            String ip = scanner.nextLine();
+            ip = scanner.nextLine();
+            if(ip.equals("0")){
+                System.exit(0);
+            }
             try {
                 //choice = Integer.parseInt(sentence);
+
                 switch (sh.getState()) {
                     case WAITING:
                        // showMessage("Write which ip you want to call.");
@@ -65,12 +70,8 @@ public class Interface extends Thread {
                         }
                         break;
                     case TALKING:
-                        //if (call) {
-                            //sh.invokeReceivedEndCall();
                             sh.callEnded();
                             trad.hangUp();
-                        //    call = false;
-                        //}
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -80,7 +81,7 @@ public class Interface extends Thread {
             }catch (Exception e){
                 e.printStackTrace();
             }
-        } while (choice != 0);
+        } while (!ip.equals("0"));
         System.exit(0);
     }
 

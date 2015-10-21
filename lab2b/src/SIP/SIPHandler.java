@@ -43,10 +43,6 @@ public class SIPHandler {
         currentState=currentState.toHangUp();
     }
 
-    //public void callEndedLocaly(String msg){
-    //    currentState=currentState.toWait(msg);
-    //}
-
 
 }
 
