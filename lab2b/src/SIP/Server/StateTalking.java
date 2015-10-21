@@ -13,7 +13,10 @@ public class StateTalking extends State{
 
     @Override
     public State toWait(String msg){
-        return new StateWaiting();
+        if(msg.equals("BYE")) {
+            return new StateWaiting();
+        }
+        return this;
     }
 
     @Override

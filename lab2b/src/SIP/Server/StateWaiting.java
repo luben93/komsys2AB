@@ -13,7 +13,11 @@ public class StateWaiting extends State {
 
     @Override
     public State toAnswer(String msg) {
-        return new StateAnswer();
+        if(msg.equals("INVITE")) {
+            return new StateAnswer();
+        }
+        return this;
+
     }
 
     @Override

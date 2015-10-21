@@ -71,6 +71,7 @@ public class client extends UnicastRemoteObject implements note {
                 //System.out.println("Lucas ska göra serverutv med jullan nu");
                 //e2.printStackTrace();
                 board.checkConnected();
+                    board.putMessage(msg);
                 //System.out.println("its dead jim, ITS DEAD ");
                 }
             } while (!msg.equals("/quit"));

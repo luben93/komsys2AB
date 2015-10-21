@@ -22,7 +22,7 @@ public class Interface extends Thread {
         Scanner scanner = new Scanner(System.in);
         boolean call = false;
         do {
-            //
+            //TODO should be checking current state
             showMessage("0. Quit");
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             showMessage("1. Call");

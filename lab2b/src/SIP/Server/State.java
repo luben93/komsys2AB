@@ -28,8 +28,8 @@ public abstract class State {
         return this;
     }
 
-    public State toWait() {
-        return this;
-    }
+//    public State toWait() {
+//        return this;
+//    }
 
 }

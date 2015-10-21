@@ -13,6 +13,10 @@ public class StateAnswer extends State{
 
     @Override
     public State toTalk(String msg){
-        return new StateTalking();
+        if(msg.contains("INVITE")){
+            return new StateTalking();
+        }
+        return this;
+
     }
 }

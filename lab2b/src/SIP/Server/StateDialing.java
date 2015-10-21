@@ -13,6 +13,9 @@ public class StateDialing extends State{
 
     @Override
     public State toTalk(String msg){
-        return new StateTalking();
+        if(msg.equals("TRO")) {//TODO logic dont fit here
+            return new StateTalking();
+        }
+        return this;
     }
 }

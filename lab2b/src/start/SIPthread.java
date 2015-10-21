@@ -34,26 +34,37 @@ public class SIPthread extends Thread {
     private void client() {
         PrintWriter out = null;
         BufferedReader in = null;
+        String msg="";
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            out.println("INVITE");
-            boolean tryingToStartCall = true;
-            while (tryingToStartCall) {
+            //TODO start audio here, and get port number, using 57654 for now
+            int localport=57654;
+            out.println("INVITE " + localport);
+            sh.outgoingCall();
+           // boolean tryingToStartCall = true;
+            while (sh.getState().equals(SIPHandler.StateEvent.DIALING)) {//?????
                 try {
-                    System.out.println(in.readLine());
-                    System.out.println(in.readLine());
-                    System.out.println(in.readLine());
-                   /* if (in.readLine().equals("100 TRYING")) {
-                        if (in.readLine().equals("180 RINGING")) {
-                            if (in.readLine().equals("200 OK")) {
+//                    System.out.println(in.readLine());
+//                    System.out.println(in.readLine());
+//                    System.out.println(in.readLine());
+                   //*
+                    msg=in.readLine();
+                    if (msg.contains("100 TRYING")) {
+                        int port=Integer.parseInt(msg.substring(11));
+                        //TODO connect to port
+                        msg=in.readLine();
+                        if (msg.equals("180 RINGING")) {
+                            msg=in.readLine();
+                            if (msg.equals("200 OK")) {
                                 System.out.println("it worked!!!");
+                                sh.callAccepted("TRO");
                                 out.println("ACK");
-                                tryingToStartCall = false;
+                                //tryingToStartCall = false;
                             }
                         }
-                    }*/
+                    }//*/
                 }catch (NumberFormatException e){
                     e.getMessage();
                 }
@@ -71,9 +82,19 @@ public class SIPthread extends Thread {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            while (true) {
-                String choice = in.readLine();
-                if (sh.getState() == SIPHandler.StateEvent.WAITING) {
+            while (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {//??????????
+                String msg = in.readLine();
+                sh.incomingCall(msg);
+                //TODO start audio here, and get port number, using 65123 for now
+                int port=65123;
+                out.println("100 TRYING "+port);
+                //TODO connect here
+                out.println("180 RINGING");
+                //TODO check all is correct
+                out.println("200 OK");
+                sh.pickUpCall(msg);
+                //TODO get out of loop here
+               // if (sh.getState() == SIPHandler.StateEvent.WAITING) {
 
                 /*switch (choice) {
                     case "INVITE":
@@ -92,6 +113,7 @@ public class SIPthread extends Thread {
                         output = sh.errorExit();
                         break;
                 }*/
+                /*
                     if (choice.contains("INVITE")) {
                     //   out.println(sh.invokeReceivedInvite());
                         //TODO new audio thread here
@@ -99,7 +121,7 @@ public class SIPthread extends Thread {
                         out.println("200 OK");//TODO cast from audio thread and state
                     }
 
-                }
+                }//*/
                 //out.println(output);
             }
         } catch (IOException e) {

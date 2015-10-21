@@ -13,6 +13,9 @@ public class StateHangingUp extends State{
 
     @Override
     public State toWait(String msg){
-        return new StateWaiting();
+        if(msg.equals("200 OK")){
+            return new StateWaiting();
+        }
+        return this;
     }
 }
