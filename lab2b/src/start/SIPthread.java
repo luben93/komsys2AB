@@ -39,6 +39,7 @@ public class SIPthread extends Thread {
             } else {
                 // client();
                 call();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +61,7 @@ public class SIPthread extends Thread {
     public void call() throws Exception {
         face.showMessage("state: " + sh.getState());
 
-        //while (true) {//???? or something else
+        while (!sh.getState().equals(SIPHandler.StateEvent.TALKING)) {//???? or something else
         switch (sh.getState()) {
             case WAITING:
                 face.showMessage("sending invite");
