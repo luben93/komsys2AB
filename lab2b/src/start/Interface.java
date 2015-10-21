@@ -26,7 +26,8 @@ public class Interface extends Thread {
         String ip="";
        // boolean call = false;
         do {
-            //TODO should be checking current state
+            showMessage("state: "+sh.getState());
+
             showMessage("type 0 to quit");
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             switch (sh.getState()){
@@ -39,14 +40,12 @@ public class Interface extends Thread {
                 default:
                     break;
             }
-            //TODO: sent bye
             ip = scanner.nextLine();
             if(ip.equals("0")){
                 System.exit(0);
             }
             try {
                 //choice = Integer.parseInt(sentence);
-                showMessage("state: "+sh.getState());
                 switch (sh.getState()) {
                     case WAITING:
                        // showMessage("Write which ip you want to call.");

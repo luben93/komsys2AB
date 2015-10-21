@@ -57,6 +57,7 @@ public class SIPthread extends Thread {
     }
 
     public void call() throws Exception {
+        face.showMessage("state: " + sh.getState());
 
         //while (true) {//???? or something else
         switch (sh.getState()) {
@@ -65,6 +66,8 @@ public class SIPthread extends Thread {
                 int localport = 57654;
                 out.println("INVITE " + localport);
                 sh.outgoingCall();
+                face.showMessage("state: "+sh.getState());
+
                 break;
             case DIALING:
                 face.showMessage(msg = in.readLine());
@@ -94,6 +97,7 @@ public class SIPthread extends Thread {
     }
 
     private void server() throws IOException {
+        face.showMessage("server waiting for INVITE");
         while (true) {
             msg = in.readLine();
             face.showMessage(msg);
