@@ -38,8 +38,9 @@ public class SIPthread extends Thread {
                 server();
             } else {
                 // client();
+                call();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -64,8 +65,8 @@ public class SIPthread extends Thread {
             case WAITING:
                 face.showMessage("sending invite");
                 //TODO start audio here, and get port number, using 57654 for now
-                int localport = 57654;
-                out.println("INVITE " + localport);
+                //int localport = 57654;
+                out.println("INVITE 57654");// + localport);
                 face.showMessage("sending INVITE sent ");
 
                 sh.outgoingCall();
