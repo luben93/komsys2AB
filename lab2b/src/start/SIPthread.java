@@ -62,11 +62,13 @@ public class SIPthread extends Thread {
         //while (true) {//???? or something else
         switch (sh.getState()) {
             case WAITING:
+                face.showMessage("sending invite");
                 //TODO start audio here, and get port number, using 57654 for now
                 int localport = 57654;
                 out.println("INVITE " + localport);
+                face.showMessage("sending INVITE sent ");
+
                 sh.outgoingCall();
-                face.showMessage("state: "+sh.getState());
 
                 break;
             case DIALING:
