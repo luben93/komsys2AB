@@ -124,6 +124,8 @@ public class SIPthread extends Thread {
     private void server() throws IOException {
         while (true) {
             msg = in.readLine();
+            face.showMessage(msg);
+
             switch (sh.getState()) {
                 case WAITING:
                     sh.incomingCall(msg);

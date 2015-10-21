@@ -28,12 +28,11 @@ public class main {
         System.out.println("Waiting for connection.....");
 
         while (true) {
-            String output = "error 418";
             try {
                 clientSocket = serverSocket.accept();
                 SIPthread trad=new SIPthread(clientSocket,true,sh,interface_client);
                 trad.start();
-                System.out.println("thread started");
+                interface_client.showMessage("thread started"+clientSocket.getInetAddress());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
