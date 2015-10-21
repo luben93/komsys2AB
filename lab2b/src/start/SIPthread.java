@@ -56,7 +56,7 @@ public class SIPthread extends Thread {
         }
     }
 
-    public void call() throws IOException{
+    public void call() throws Exception {
 
         //while (true) {//???? or something else
             msg=in.readLine();
@@ -78,13 +78,15 @@ public class SIPthread extends Thread {
                                 face.showMessage("it worked!!!");
                                 sh.callAccepted("TRO");
                                 out.println("ACK");
+                                return;
                                 //tryingToStartCall = false;
                             }
                         }
                     }
-                    break;
+                    throw new Exception("SIP protocol ERROR");
+
                 default:
-                    break;
+                    throw new Exception("not waiting or dialing");
 
             }
         //}

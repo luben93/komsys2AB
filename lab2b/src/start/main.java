@@ -32,7 +32,7 @@ public class main {
                 clientSocket = serverSocket.accept();
                 SIPthread trad=new SIPthread(clientSocket,true,sh,interface_client);
                 trad.start();
-                interface_client.showMessage("thread started"+clientSocket.getInetAddress());
+                interface_client.showMessage("thread started to: "+clientSocket.getInetAddress());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
