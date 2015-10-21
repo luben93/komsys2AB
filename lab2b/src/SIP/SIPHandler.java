@@ -1,7 +1,7 @@
 package SIP;
 
-import SIP.Server.State;
-import SIP.Server.StateWaiting;
+import SIP.State.State;
+import SIP.State.StateWaiting;
 
 /**
  * Created by Julia on 2015-10-13.
@@ -39,13 +39,13 @@ public class SIPHandler {
         currentState=currentState.toWait(msg);
     }
 
-    public void callEndedRemotely(){
+    public void callEnded(){
         currentState=currentState.toHangUp();
     }
 
-    public void callEndedLocaly(String msg){
-        currentState=currentState.toWait(msg);
-    }
+    //public void callEndedLocaly(String msg){
+    //    currentState=currentState.toWait(msg);
+    //}
 
 
 }

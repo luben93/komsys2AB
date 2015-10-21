@@ -1,6 +1,7 @@
-package SIP;
+package start;
 
-import start.SIPthread;
+import SIP.SIPHandler;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -20,30 +21,41 @@ public class Interface extends Thread {
     public void run() {
         int choice = -1;
         Scanner scanner = new Scanner(System.in);
-        boolean call = false;
+        Socket s=null;
+        SIPthread trad=null;
+       // boolean call = false;
         do {
             //TODO should be checking current state
-            showMessage("0. Quit");
+            showMessage("type 0 to quit");
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
-            showMessage("1. Call");
-            if (call) {
-                showMessage("2. Hang upp");
+            switch (sh.getState()){
+                case WAITING:
+                    showMessage("type IP to call");
+                    break;
+                case TALKING:
+                    showMessage("press enter to hang up");
+                    break;
+                default:
+                    break;
             }
             //TODO: sent bye
-            String sentence = scanner.nextLine();
+            String ip = scanner.nextLine();
             try {
-                choice = Integer.parseInt(sentence);
-                switch (choice) {
-                    case 1:
-                        showMessage("Write which ip you want to call.");
-                        String invite_msg = scanner.nextLine();
+                //choice = Integer.parseInt(sentence);
+                switch (sh.getState()) {
+                    case WAITING:
+                       // showMessage("Write which ip you want to call.");
+                       // String invite_msg = scanner.nextLine();
                         try {
-                            Socket s = new Socket(invite_msg, 4321);
-                            SIPthread trad = new SIPthread(s, false, sh);
+                             s = new Socket(ip, 4321);
+                             trad = new SIPthread(s, false, sh,this);
                             trad.start();
+                            trad.call();
+
                             showMessage("Calling ... ");
                            // sh.invokeReceivedInvite();
-                            call = true;
+
+                            //call = true;
                         } catch (UnknownHostException e) {
                             showMessage("The ip you entered is not correct");
                             //  e.printStackTrace();
@@ -52,15 +64,21 @@ public class Interface extends Thread {
                             //e.printStackTrace();
                         }
                         break;
-                    case 2:
-                        if (call) {
+                    case TALKING:
+                        //if (call) {
                             //sh.invokeReceivedEndCall();
-                            call = false;
-                        }
+                            sh.callEnded();
+                            trad.hangUp();
+                        //    call = false;
+                        //}
                         break;
                 }
             } catch (NumberFormatException e) {
                 showMessage("You have to write 1 or 2");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         } while (choice != 0);
         System.exit(0);
