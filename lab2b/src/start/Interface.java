@@ -46,7 +46,7 @@ public class Interface extends Thread {
             }
             try {
                 //choice = Integer.parseInt(sentence);
-
+                showMessage("state: "+sh.getState());
                 switch (sh.getState()) {
                     case WAITING:
                        // showMessage("Write which ip you want to call.");
