@@ -21,11 +21,11 @@ public class SIPthread extends Thread {
     private Interface face;
 
 
-    public SIPthread(Socket socket, boolean isServer, SIPHandler sh,Interface face) throws IOException {
+    public SIPthread(Socket socket, boolean isServer, SIPHandler sh, Interface face) throws IOException {
         this.socket = socket;
         this.sh = sh;
         this.isServer = isServer;
-        this.face=face;
+        this.face = face;
     }
 
     public void run() {
@@ -37,15 +37,15 @@ public class SIPthread extends Thread {
             if (isServer) {
                 server();
             } else {
-               // client();
+                // client();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void hangUp()throws Exception{
-       // msg=in.readLine();
+    public void hangUp() throws Exception {
+        // msg=in.readLine();
         switch (sh.getState()) {
             case HANGINGUP:
                 out.println("BYE");
@@ -59,68 +59,37 @@ public class SIPthread extends Thread {
     public void call() throws Exception {
 
         //while (true) {//???? or something else
-        face.showMessage( msg=in.readLine());
-            switch (sh.getState()){
-                case WAITING:
-                    //TODO start audio here, and get port number, using 57654 for now
-                    int localport=57654;
-                    out.println("INVITE "+localport);
-                    sh.outgoingCall();
-                    break;
-                case DIALING:
-
-                    if (msg.contains("100 TRYING")) {
-                        int port=Integer.parseInt(msg.substring(11));
-                        //TODO connect to port
-                        face.showMessage( msg=in.readLine());
-                        if (msg.equals("180 RINGING")) {
-                            face.showMessage( msg=in.readLine());
-                            if (msg.equals("200 OK")) {
-                                face.showMessage("it worked!!!");
-                                sh.callAccepted("TRO");
-                                out.println("ACK");
-                                return;
-                                //tryingToStartCall = false;
-                            }
+        switch (sh.getState()) {
+            case WAITING:
+                //TODO start audio here, and get port number, using 57654 for now
+                int localport = 57654;
+                out.println("INVITE " + localport);
+                sh.outgoingCall();
+                break;
+            case DIALING:
+                face.showMessage(msg = in.readLine());
+                if (msg.contains("100 TRYING")) {
+                    int port = Integer.parseInt(msg.substring(11));
+                    //TODO connect to port
+                    face.showMessage(msg = in.readLine());
+                    if (msg.equals("180 RINGING")) {
+                        face.showMessage(msg = in.readLine());
+                        if (msg.equals("200 OK")) {
+                            face.showMessage("it worked!!!");
+                            sh.callAccepted("TRO");
+                            out.println("ACK");
+                            return;
+                            //tryingToStartCall = false;
                         }
                     }
-                    throw new Exception("SIP protocol ERROR");
-
-                default:
-                    throw new Exception("not waiting or dialing");
-
-            }
-        //}
-
-
-    /*        int localport=57654;
-            out.println("INVITE " + localport);
-            sh.outgoingCall();
-           // boolean tryingToStartCall = true;
-            while (sh.getState().equals(SIPHandler.StateEvent.DIALING)) {//?????
-                try {
-//                    face.showMessage();(in.readLine());
-//                    face.showMessage();(in.readLine());
-//                    face.showMessage();(in.readLine());
-                   //*
-                    msg=in.readLine();
-                    if (msg.contains("100 TRYING")) {
-                        int port=Integer.parseInt(msg.substring(11));
-                        msg=in.readLine();
-                        if (msg.equals("180 RINGING")) {
-                            msg=in.readLine();
-                            if (msg.equals("200 OK")) {
-                                face.showMessage();("it worked!!!");
-                                sh.callAccepted("TRO");
-                                out.println("ACK");
-                                //tryingToStartCall = false;
-                            }
-                        }
-                    }//*
-                }catch (NumberFormatException e){
-                    e.getMessage();
                 }
-            }//*/
+                throw new Exception("SIP protocol ERROR");
+
+            default:
+                throw new Exception("not waiting or dialing");
+
+        }
+
 
     }
 
@@ -145,12 +114,12 @@ public class SIPthread extends Thread {
                 case ANSWERING:
                     sh.pickUpCall(msg);
                     break;
-               case TALKING:
-                   sh.hangUp(msg);
-                   //TODO quit server
-                   face.showMessage("call ended by other party");
-                   out.println("200 OK");
-                   break;
+                case TALKING:
+                    sh.hangUp(msg);
+                    //TODO quit server
+                    face.showMessage("call ended by other party");
+                    out.println("200 OK");
+                    break;
                 /*case HANGINGUP:
                     sh.callEnded();
                     //TODO quit server
@@ -159,11 +128,8 @@ public class SIPthread extends Thread {
                 default:
                     out.println("ERROR 500");
                     break;
-
             }
         }
-
-
     }
 
 }
