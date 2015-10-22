@@ -24,7 +24,7 @@ public class Interface extends Thread {
         int choice = -1;
         Scanner scanner = new Scanner(System.in);
         Socket s = null;
-        SIPthread trad = server;
+//        SIPthread trad =null;
         String ip = "";
         // boolean call = false;
         do {
@@ -43,10 +43,12 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-
+            boolean isClient=false;
+            SIPthread trad=null;
             try {
                 //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
+
                     case WAITING:
                         // showMessage("Write which ip you want to call.");
                         // String invite_msg = scanner.nextLine();
@@ -54,6 +56,7 @@ public class Interface extends Thread {
                             s = new Socket(ip, 4321);
                             trad = new SIPthread(sh,s,this,false);
                             trad.start();
+                            isClient=true;
 //                            trad.call();
 
                             showMessage("Calling ... ");
@@ -70,14 +73,16 @@ public class Interface extends Thread {
                         break;
                     case TALKING:
                         showMessage("You have pressed hang up");
-                        if(server!=null) {
+                        if(isClient) {
                             //TODO: tråden inte startad
                             sh.callEnded();
-                            trad.hangUp();
-                            trad = server;
+                            trad.hangUp();//TODO BOOLEAN
                             showMessage("End");
+                            isClient=false;
                         }else{
-                           throw new NullPointerException("server is empty");
+                            sh.callEnded();
+                            server.hangUp();
+                            showMessage("End");
                         }
                         break;
                 }
