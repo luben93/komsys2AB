@@ -53,6 +53,7 @@ public class SIPthread extends Thread {
     public synchronized void hangUp() throws StateException {
         switch (sh.getState()) {
             case HANGINGUP:
+
                 out.println("BYE");
                 break;
             default:

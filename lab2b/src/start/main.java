@@ -13,10 +13,10 @@ import java.net.Socket;
 public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
-        int choice = -1;
-        SIPthread trad = null;
-        try {
-            trad = new SIPthread(sh);
+            int choice = -1;
+            SIPthread trad = null;
+            try {
+                trad = new SIPthread(sh);
         } catch (IOException e) {
             e.printStackTrace();
         }
