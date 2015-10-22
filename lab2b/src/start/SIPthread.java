@@ -15,22 +15,20 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private boolean isServer;
-    private PrintWriter out ;
-    private BufferedReader in ;
+    private PrintWriter out;
+    private BufferedReader in;
     private SIPHandler sh;
     private String msg;
     private Interface face;
 
 
-    public SIPthread( SIPHandler sh) throws IOException {
+    public SIPthread(SIPHandler sh, Socket socket, Interface face, Boolean isServer) throws IOException {
         this.sh = sh;
-    }
-
-    public void init(Socket socket, Interface face, Boolean isServer){
         this.socket = socket;
         this.face = face;
         this.isServer = isServer;
     }
+
 
     public void run() {
         try {
@@ -50,15 +48,33 @@ public class SIPthread extends Thread {
         }
     }
 
-    public synchronized void hangUp() throws StateException {
+    public synchronized void hangUp() throws IOException, StateException {
         switch (sh.getState()) {
-            case HANGINGUP:
-
+            case TALKING:
                 out.println("BYE");
+                sh.callEnded();
                 break;
             default:
-                System.err.println("i'm sorry dave i'm afraid i can't do that");
-                throw new StateException("Can't end call now");
+                //TODO error handling
+                throw new StateException("wrong state: "+sh.getState());
+        }
+    }
+
+    private void hangUp(String inmsg) throws StateException {
+        face.showMessage(inmsg);
+        switch (sh.getState()){
+            case TALKING:
+                sh.hangUp(inmsg);
+                out.println("200 OK");
+                //TODO turn off audio
+                return;
+            case HANGINGUP:
+                sh.hangUp(inmsg);
+                //TODO turn off audio
+                return;//exit thread
+            default:
+                throw new StateException("wrong state: "+sh.getState()+"\n msg: "+inmsg);
+
         }
     }
 
@@ -95,16 +111,10 @@ public class SIPthread extends Thread {
                         }
                     }
                     throw new Exception("SIP protocol ERROR");
-                case HANGINGUP:
-                    face.showMessage(msg = in.readLine());
-                    sh.hangUp(msg);
-                    //TODO quit server
-                    face.showMessage("call ended by other party");
-                    out.println("200 OK");
-                    return;
-                default:
-                    throw new Exception("not waiting or dialing");
 
+                default:
+                    hangUp(in.readLine());
+                    return;
             }
 
         }
@@ -134,27 +144,10 @@ public class SIPthread extends Thread {
                     case ANSWERING:
                         sh.pickUpCall(msg);
                         break;
-                    case TALKING:
-                        sh.hangUp(msg);
-                        //TODO quit server
-                        face.showMessage("call ended by other party");
-                        out.println("200 OK");
-                        return;
-                    case HANGINGUP:
-                        sh.hangUp(msg);
-                        try {
-                            out.close();
-                            in.close();
-                            socket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        //TODO quit server
-                        face.showMessage("call ended ");
-                        return;
+
                     default:
-                        out.println("ERROR 500");
-                        throw new Exception("ERROR 500");
+                        hangUp(msg);
+                        return;
 
                 }
             } catch (StateException e) {

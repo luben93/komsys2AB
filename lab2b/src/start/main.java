@@ -13,16 +13,10 @@ import java.net.Socket;
 public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
-            int choice = -1;
-            SIPthread trad = null;
-            try {
-                trad = new SIPthread(sh);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int choice = -1;
+        SIPthread trad = null;
 
-        Interface interface_client = new Interface(sh, trad);
-
+        Interface interface_client = new Interface(sh);
         interface_client.start();
 
         ServerSocket serverSocket = null;
@@ -38,18 +32,13 @@ public class main {
         while (true) {
             try {
                 clientSocket = serverSocket.accept();
-                trad.init(clientSocket, interface_client, true);
+                trad= new SIPthread(sh, clientSocket, interface_client, true);
                 trad.start();
+                interface_client.updateServer(trad);
+
                 interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-
-                try {
-                    trad = new SIPthread(sh);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
 
 

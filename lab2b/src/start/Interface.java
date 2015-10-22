@@ -14,9 +14,9 @@ public class Interface extends Thread {
     private SIPHandler sh;
     private SIPthread server;
 
-    public Interface(SIPHandler sh, SIPthread server) {
+    public Interface(SIPHandler sh) {
         this.sh = sh;
-        this.server = server;
+       // this.server = server;
     }
 
     @Override
@@ -24,9 +24,11 @@ public class Interface extends Thread {
         int choice = -1;
         Scanner scanner = new Scanner(System.in);
         Socket s = null;
-        SIPthread trad = server;
+//        SIPthread trad =null;
         String ip = "";
         // boolean call = false;
+        boolean isClient=false;
+
         do {
             showMessage("state: " + sh.getState());
 
@@ -43,20 +45,19 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-            if (ip.equals("0")) {
-                System.exit(0);
-            }
+            SIPthread trad=null;
             try {
                 //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
+
                     case WAITING:
                         // showMessage("Write which ip you want to call.");
                         // String invite_msg = scanner.nextLine();
                         try {
                             s = new Socket(ip, 4321);
-                            trad = new SIPthread(sh);
-                            trad.init(s,this,false);
+                            trad = new SIPthread(sh,s,this,false);
                             trad.start();
+                            isClient=true;
 //                            trad.call();
 
                             showMessage("Calling ... ");
@@ -73,11 +74,17 @@ public class Interface extends Thread {
                         break;
                     case TALKING:
                         showMessage("You have pressed hang up");
-                        //TODO: tråden inte startad
-                        sh.callEnded();
-                        trad.hangUp();
-                        trad=server;
-                        showMessage("End");
+                        if(isClient) {
+                            //TODO: tråden inte startad
+                            sh.callEnded();
+                            trad.hangUp();//TODO BOOLEAN
+                            showMessage("End");
+                            isClient=false;
+                        }else{
+                            sh.callEnded();
+                            server.hangUp();
+                            showMessage("End");
+                        }
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -87,8 +94,12 @@ public class Interface extends Thread {
             }
            showMessage("while end");
         } while (!ip.equals("0"));
-
+        //TODO exit correctly
         System.exit(0);
+    }
+
+    public synchronized void updateServer(SIPthread s){
+        server=s;
     }
 
     public synchronized void showMessage(String msg) {
