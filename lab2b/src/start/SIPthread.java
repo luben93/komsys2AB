@@ -67,14 +67,21 @@ public class SIPthread extends Thread {
                 sh.hangUp(inmsg);
                 out.println("200 OK");
                 //TODO turn off audio
-                return;
+                break;
             case HANGINGUP:
                 sh.hangUp(inmsg);
                 //TODO turn off audio
-                return;//exit thread
+                //exit thread
+                break;
             default:
                 throw new StateException("wrong state: "+sh.getState()+"\n msg: "+inmsg);
-
+        }
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

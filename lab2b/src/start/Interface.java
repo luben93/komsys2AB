@@ -16,7 +16,7 @@ public class Interface extends Thread {
 
     public Interface(SIPHandler sh) {
         this.sh = sh;
-       // this.server = server;
+        // this.server = server;
     }
 
     @Override
@@ -27,7 +27,8 @@ public class Interface extends Thread {
 //        SIPthread trad =null;
         String ip = "";
         // boolean call = false;
-        boolean isClient=false;
+        boolean isClient = false;
+        SIPthread trad = null;
 
         do {
             showMessage("state: " + sh.getState());
@@ -45,7 +46,7 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-            SIPthread trad=null;
+
             try {
                 //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
@@ -55,9 +56,9 @@ public class Interface extends Thread {
                         // String invite_msg = scanner.nextLine();
                         try {
                             s = new Socket(ip, 4321);
-                            trad = new SIPthread(sh,s,this,false);
+                            trad = new SIPthread(sh, s, this, false);
                             trad.start();
-                            isClient=true;
+                            isClient = true;
 //                            trad.call();
 
                             showMessage("Calling ... ");
@@ -74,12 +75,12 @@ public class Interface extends Thread {
                         break;
                     case TALKING:
                         showMessage("You have pressed hang up");
-                        if(isClient) {
+                        if (isClient) {
                             //TODO: tråden inte startad
                             trad.hangUp();//TODO BOOLEAN
                             showMessage("End");
-                            isClient=false;
-                        }else{
+                            isClient = false;
+                        } else {
                             server.hangUp();
                             showMessage("End");
                         }
@@ -90,14 +91,14 @@ public class Interface extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-           showMessage("while end");
+            showMessage("while end");
         } while (!ip.equals("0"));
         //TODO exit correctly
         System.exit(0);
     }
 
-    public synchronized void updateServer(SIPthread s){
-        server=s;
+    public synchronized void updateServer(SIPthread s) {
+        server = s;
     }
 
     public synchronized void showMessage(String msg) {
