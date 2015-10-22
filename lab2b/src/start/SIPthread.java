@@ -1,5 +1,6 @@
 package start;
 
+import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
 import SIP.State.StateException;
 
@@ -20,6 +21,7 @@ public class SIPthread extends Thread {
     private SIPHandler sh;
     private String msg;
     private Interface face;
+    private AudioStreamUDP asu;
 
 
     public SIPthread(SIPHandler sh, Socket socket, Interface face, Boolean isServer) throws IOException {
@@ -36,6 +38,7 @@ public class SIPthread extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
+            asu = new AudioStreamUDP();
             if (isServer) {
                 server();
             } else {
@@ -49,6 +52,7 @@ public class SIPthread extends Thread {
     }
 
     public synchronized void hangUp() throws IOException, StateException {
+
         switch (sh.getState()) {
             case TALKING:
                 out.println("BYE");
@@ -77,6 +81,7 @@ public class SIPthread extends Thread {
                 throw new StateException("wrong state: "+sh.getState()+"\n msg: "+inmsg);
         }
         try {
+            asu.stopStreaming();
             out.close();
             in.close();
             socket.close();
@@ -91,27 +96,24 @@ public class SIPthread extends Thread {
 
             switch (sh.getState()) {
                 case WAITING:
-//                    face.showMessage("sending invite");
-                    //TODO start audio here, and get port number, using 57654 for now
-                    //int localport = 57654;
-                    out.println("INVITE 57654");// + localport);
-//                    face.showMessage("sending INVITE sent ");
-
+                    out.println("INVITE "+asu.getLocalPort());
                     sh.outgoingCall();
-
                     break;
                 case DIALING:
                     msg = in.readLine();
                     if (msg.contains("100 TRYING")) {
                         int port = Integer.parseInt(msg.substring(11));
+                        asu.connectTo(socket.getInetAddress(),port);
                         //TODO connect to port
                         msg = in.readLine();
                         if (msg.equals("180 RINGING")) {
+
                             msg = in.readLine();
                             if (msg.equals("200 OK")) {
                                 face.showMessage("Press 0 enter to hang up");
                                 sh.callAccepted("TRO");
                                 out.println("ACK");
+                                asu.startStreaming();
                                 break;
                                 //tryingToStartCall = false;
                             }
@@ -135,14 +137,14 @@ public class SIPthread extends Thread {
                 switch (sh.getState()) {
                     case WAITING:
                         sh.incomingCall(msg);
-                        //TODO start audio here, and get port number, using 65123 for now
-                        int port = 65123;
+                        int port_peer = Integer.parseInt(msg.substring(6));
+                        int port = asu.getLocalPort();
                         out.println("100 TRYING " + port);
-                        //TODO connect here
+                        asu.connectTo(socket.getInetAddress(),port_peer);
                         out.println("180 RINGING");
-                        //TODO check all is correct
+                        asu.startStreaming();
                         out.println("200 OK");
-                        //TODO get out of loop here
+                        //TODO check all is correct
                         face.showMessage("call connected, press 0 enter to hang up");
                         break;
                     case ANSWERING:
