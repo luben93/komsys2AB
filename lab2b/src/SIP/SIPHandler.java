@@ -1,6 +1,7 @@
 package SIP;
 
 import SIP.State.State;
+import SIP.State.StateException;
 import SIP.State.StateWaiting;
 
 /**
@@ -19,7 +20,7 @@ public class SIPHandler {
         return currentState.getStateName();
     }
 
-    public void incomingCall(String msg){
+    public void incomingCall(String msg) throws StateException {
         currentState=currentState.toAnswer(msg);
     }
 
@@ -27,15 +28,15 @@ public class SIPHandler {
         currentState=currentState.toDial();
     }
 
-    public void pickUpCall(String msg){
+    public void pickUpCall(String msg) throws StateException {
         currentState=currentState.toTalk(msg);
     }
 
-    public void callAccepted(String msg){
+    public void callAccepted(String msg) throws StateException {
         currentState=currentState.toTalk(msg);
     }
 
-    public void hangUp(String msg){
+    public void hangUp(String msg) throws StateException {
         currentState=currentState.toWait(msg);
     }
 
