@@ -51,24 +51,9 @@ public class SIPthread extends Thread {
     }
 
     public synchronized void hangUp() throws StateException {
-        face.showMessage("hangUp start");
-        // msg=in.readLine();
         switch (sh.getState()) {
             case HANGINGUP:
                 out.println("BYE");
-
-                try {
-                    face.showMessage("hangUp try");
-                    face.showMessage(msg = in.readLine());
-                    sh.hangUp(msg);
-                    out.close();
-                    in.close();
-                    socket.close();
-                    face.showMessage("hangUp try done");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 break;
             default:
                 System.err.println("i'm sorry dave i'm afraid i can't do that");
@@ -77,7 +62,6 @@ public class SIPthread extends Thread {
     }
 
     public void call() throws Exception {
-
         while (true) {//???? or something else
             face.showMessage("state: " + sh.getState());
 
@@ -110,7 +94,7 @@ public class SIPthread extends Thread {
                         }
                     }
                     throw new Exception("SIP protocol ERROR");
-                case TALKING:
+                case HANGINGUP:
                     face.showMessage(msg = in.readLine());
                     sh.hangUp(msg);
                     //TODO quit server
@@ -154,6 +138,18 @@ public class SIPthread extends Thread {
                         //TODO quit server
                         face.showMessage("call ended by other party");
                         out.println("200 OK");
+                        return;
+                    case HANGINGUP:
+                        sh.hangUp(msg);
+                        try {
+                            out.close();
+                            in.close();
+                            socket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //TODO quit server
+                        face.showMessage("call ended ");
                         return;
                     default:
                         out.println("ERROR 500");

@@ -21,7 +21,7 @@ public class main {
             e.printStackTrace();
         }
 
-        Interface interface_client = new Interface(sh,trad);
+        Interface interface_client = new Interface(sh, trad);
 
         interface_client.start();
 
@@ -44,8 +44,12 @@ public class main {
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                //out.println(output);
 
+                try {
+                    trad = new SIPthread(sh);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
 
