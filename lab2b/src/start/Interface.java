@@ -27,6 +27,8 @@ public class Interface extends Thread {
 //        SIPthread trad =null;
         String ip = "";
         // boolean call = false;
+        boolean isClient=false;
+
         do {
             showMessage("state: " + sh.getState());
 
@@ -43,7 +45,6 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-            boolean isClient=false;
             SIPthread trad=null;
             try {
                 //choice = Integer.parseInt(sentence);

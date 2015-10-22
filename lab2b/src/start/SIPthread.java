@@ -15,14 +15,14 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private boolean isServer;
-    private PrintWriter out ;
-    private BufferedReader in ;
+    private PrintWriter out;
+    private BufferedReader in;
     private SIPHandler sh;
     private String msg;
     private Interface face;
 
 
-    public SIPthread( SIPHandler sh,Socket socket, Interface face, Boolean isServer) throws IOException {
+    public SIPthread(SIPHandler sh, Socket socket, Interface face, Boolean isServer) throws IOException {
         this.sh = sh;
         this.socket = socket;
         this.face = face;
@@ -49,11 +49,33 @@ public class SIPthread extends Thread {
     }
 
     public synchronized void hangUp() throws IOException, StateException {
-
+        switch (sh.getState()) {
+            case TALKING:
+                out.println("BYE");
+                sh.callEnded();
+                break;
+            default:
+                //TODO error handling
+                throw new StateException("wrong state: "+sh.getState());
+        }
     }
 
-    private  void hangUp(String msgIn) throws StateException {
+    private void hangUp(String inmsg) throws StateException {
+        face.showMessage(inmsg);
+        switch (sh.getState()){
+            case TALKING:
+                sh.hangUp(inmsg);
+                out.println("200 OK");
+                //TODO turn off audio
+                return;
+            case HANGINGUP:
+                sh.hangUp(inmsg);
+                //TODO turn off audio
+                return;//exit thread
+            default:
+                throw new StateException("wrong state: "+sh.getState()+"\n msg: "+inmsg);
 
+        }
     }
 
     public void call() throws Exception {
@@ -91,7 +113,8 @@ public class SIPthread extends Thread {
                     throw new Exception("SIP protocol ERROR");
 
                 default:
-                    hangUp(msg);
+                    hangUp(in.readLine());
+                    return;
             }
 
         }
@@ -124,6 +147,7 @@ public class SIPthread extends Thread {
 
                     default:
                         hangUp(msg);
+                        return;
 
                 }
             } catch (StateException e) {
