@@ -37,12 +37,13 @@ public class Interface extends Thread {
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             switch (sh.getState()) {
                 case WAITING:
-                    showMessage("type IP to call");
+                    showMessage("type IP to call\nor 0 to exit");
                     break;
                 case TALKING:
                     showMessage("press 0 enter to hang up");
                     break;
                 default:
+                    showMessage("press 0 enter to reset");
                     break;
             }
             ip = scanner.nextLine();
@@ -54,6 +55,9 @@ public class Interface extends Thread {
                 switch (sh.getState()) {
 
                     case WAITING:
+                        if(ip.equals("0")){
+                            System.exit(0);
+                        }
                         // showMessage("Write which ip you want to call.");
                         // String invite_msg = scanner.nextLine();
                         try {
@@ -79,16 +83,17 @@ public class Interface extends Thread {
                         if (ip.equals("0")) {
                             showMessage("You have pressed hang up");
                             if (isClient) {
-                                //TODO: tråden inte startad
-                                trad.hangUp();//TODO BOOLEAN
+                                trad.hangUp();
                                 isClient = false;
                             } else {
                                 server.hangUp();
                             }
                         }
                         break;
-                    case HANGINGUP:
-                        break;
+                    default:
+                        if (ip.equals("0")) {
+                            sh.forceWaiting();
+                        }
                 }
             } catch (NumberFormatException e) {
                 showMessage("You have to write 1 or 2");

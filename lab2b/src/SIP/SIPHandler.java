@@ -44,6 +44,9 @@ public class SIPHandler {
         currentState=currentState.toHangUp();
     }
 
+    public void forceWaiting(){
+        currentState=new StateWaiting();
+    }
 
 }
 
