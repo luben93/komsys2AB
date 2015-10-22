@@ -12,10 +12,10 @@ public class StateHangingUp extends State{
     }
 
     @Override
-    public State toWait(String msg){
+    public State toWait(String msg) throws StateException {
         if(msg.equals("200 OK")){
             return new StateWaiting();
         }
-        return this;
+        throw new StateException("NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
     }
 }

@@ -12,11 +12,11 @@ public abstract class State {
         return this;
     }
 
-    public State toAnswer(String msg) {
+    public State toAnswer(String msg) throws StateException {
         return this;
     }
 
-    public State toTalk(String msg) {
+    public State toTalk(String msg)  throws StateException {
         return this;
     }
 
@@ -24,7 +24,7 @@ public abstract class State {
         return this;
     }
 
-    public State toWait(String msg) {
+    public State toWait(String msg) throws StateException {
         return this;
     }
 

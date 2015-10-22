@@ -1,6 +1,7 @@
 package start;
 
 import SIP.SIPHandler;
+import SIP.State.StateException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private boolean isServer;
-    private PrintWriter out ;
-    private BufferedReader in ;
+    private PrintWriter out;
+    private BufferedReader in;
     private SIPHandler sh;
     private String msg;
     private Interface face;
@@ -51,6 +52,8 @@ public class SIPthread extends Thread {
         switch (sh.getState()) {
             case HANGINGUP:
                 out.println("BYE");
+                face.showMessage(msg = in.readLine());
+                sh.hangUp(msg);
                 break;
             default:
                 System.err.println("i'm sorry dave i'm afraid i can't do that");
@@ -100,42 +103,43 @@ public class SIPthread extends Thread {
         }
     }
 
-    private void server() throws IOException {
+    private void server() throws Exception {
         face.showMessage("server waiting for INVITE");
         while (true) {
-            msg = in.readLine();
-            face.showMessage(msg);
+            try {
+                msg = in.readLine();
+                face.showMessage(msg);
 
-            switch (sh.getState()) {
-                case WAITING:
-                    sh.incomingCall(msg);
-                    //TODO start audio here, and get port number, using 65123 for now
-                    int port = 65123;
-                    out.println("100 TRYING " + port);
-                    //TODO connect here
-                    out.println("180 RINGING");
-                    //TODO check all is correct
-                    out.println("200 OK");
-                    //TODO get out of loop here
-                    face.showMessage("call connected, press enter to hang up");
-                    break;
-                case ANSWERING:
-                    sh.pickUpCall(msg);
-                    break;
-                case TALKING:
-                    sh.hangUp(msg);
-                    //TODO quit server
-                    face.showMessage("call ended by other party");
-                    out.println("200 OK");
-                    break;
-                /*case HANGINGUP:
-                    sh.callEnded();
-                    //TODO quit server
-                    out.println("200 OK");
-                    break;*/
-                default:
-                    out.println("ERROR 500");
-                    break;
+                switch (sh.getState()) {
+                    case WAITING:
+                        sh.incomingCall(msg);
+                        //TODO start audio here, and get port number, using 65123 for now
+                        int port = 65123;
+                        out.println("100 TRYING " + port);
+                        //TODO connect here
+                        out.println("180 RINGING");
+                        //TODO check all is correct
+                        out.println("200 OK");
+                        //TODO get out of loop here
+                        face.showMessage("call connected, press enter to hang up");
+                        break;
+                    case ANSWERING:
+                        sh.pickUpCall(msg);
+                        break;
+                    case TALKING:
+                        sh.hangUp(msg);
+                        //TODO quit server
+                        face.showMessage("call ended by other party");
+                        out.println("200 OK");
+                        break;
+                    default:
+                        out.println("ERROR 500");
+                        throw new Exception("ERROR 500");
+
+                }
+            } catch (StateException e) {
+                //Visa meddelande till användare
+                e.printStackTrace();
             }
         }
     }

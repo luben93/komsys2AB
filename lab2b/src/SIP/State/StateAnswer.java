@@ -12,12 +12,10 @@ public class StateAnswer extends State{
     }
 
     @Override
-    public State toTalk(String msg){
-        System.err.println("msg: "+msg);
+    public State toTalk(String msg) throws StateException {
         if(msg.contains("INVITE")){
             return new StateTalking();
         }
-        return this;
-
+        throw new StateException("NOT RECEIVED INVITE, FROM STATE ANSWER TO STATE TALKING");
     }
 }

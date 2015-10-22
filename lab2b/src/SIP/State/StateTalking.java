@@ -12,11 +12,11 @@ public class StateTalking extends State{
     }
 
     @Override
-    public State toWait(String msg){
+    public State toWait(String msg) throws StateException {
         if(msg.equals("BYE")) {
             return new StateWaiting();
         }
-        return this;
+        throw new StateException("NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
     }
 
     @Override

@@ -12,12 +12,11 @@ public class StateWaiting extends State {
     }
 
     @Override
-    public State toAnswer(String msg) {
+    public State toAnswer(String msg) throws StateException {
         if(msg.equals("INVITE")) {
             return new StateAnswer();
         }
-        return this;
-
+        throw new StateException("NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");
     }
 
     @Override
