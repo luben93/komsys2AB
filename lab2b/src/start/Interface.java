@@ -77,7 +77,7 @@ public class Interface extends Thread {
                         sh.callEnded();
                         trad.hangUp();
                         trad=server;
-
+                        showMessage("End");
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -85,6 +85,7 @@ public class Interface extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+           showMessage("while end");
         } while (!ip.equals("0"));
 
         System.exit(0);

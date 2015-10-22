@@ -51,17 +51,20 @@ public class SIPthread extends Thread {
     }
 
     public synchronized void hangUp() throws StateException {
+        face.showMessage("hangUp start");
         // msg=in.readLine();
         switch (sh.getState()) {
             case HANGINGUP:
                 out.println("BYE");
 
                 try {
+                    face.showMessage("hangUp try");
                     face.showMessage(msg = in.readLine());
                     sh.hangUp(msg);
                     out.close();
                     in.close();
                     socket.close();
+                    face.showMessage("hangUp try done");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
