@@ -37,7 +37,7 @@ public class Interface extends Thread {
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             switch (sh.getState()) {
                 case WAITING:
-                    showMessage("type IP to call\n or 0 to exit");
+                    showMessage("type IP to call\nor 0 to exit");
                     break;
                 case TALKING:
                     showMessage("press 0 enter to hang up");
