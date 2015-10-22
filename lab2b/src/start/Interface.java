@@ -74,13 +74,15 @@ public class Interface extends Thread {
                         }
                         break;
                     case TALKING:
-                        showMessage("You have pressed hang up");
-                        if (isClient) {
-                            //TODO: tråden inte startad
-                            trad.hangUp();//TODO BOOLEAN
-                            isClient = false;
-                        } else {
-                            server.hangUp();
+                        if (ip.equals("0")) {
+                            showMessage("You have pressed hang up");
+                            if (isClient) {
+                                //TODO: tråden inte startad
+                                trad.hangUp();//TODO BOOLEAN
+                                isClient = false;
+                            } else {
+                                server.hangUp();
+                            }
                         }
                         break;
                 }
