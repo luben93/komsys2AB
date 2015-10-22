@@ -14,9 +14,9 @@ public class Interface extends Thread {
     private SIPHandler sh;
     private SIPthread server;
 
-    public Interface(SIPHandler sh, SIPthread server) {
+    public Interface(SIPHandler sh) {
         this.sh = sh;
-        this.server = server;
+       // this.server = server;
     }
 
     @Override
@@ -43,9 +43,7 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-            if (ip.equals("0")) {
-                System.exit(0);
-            }
+
             try {
                 //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
@@ -54,8 +52,7 @@ public class Interface extends Thread {
                         // String invite_msg = scanner.nextLine();
                         try {
                             s = new Socket(ip, 4321);
-                            trad = new SIPthread(sh);
-                            trad.init(s,this,false);
+                            trad = new SIPthread(sh,s,this,false);
                             trad.start();
 //                            trad.call();
 
@@ -73,11 +70,15 @@ public class Interface extends Thread {
                         break;
                     case TALKING:
                         showMessage("You have pressed hang up");
-                        //TODO: tråden inte startad
-                        sh.callEnded();
-                        trad.hangUp();
-                        trad=server;
-                        showMessage("End");
+                        if(server!=null) {
+                            //TODO: tråden inte startad
+                            sh.callEnded();
+                            trad.hangUp();
+                            trad = server;
+                            showMessage("End");
+                        }else{
+                           throw new NullPointerException("server is empty");
+                        }
                         break;
                 }
             } catch (NumberFormatException e) {
@@ -87,8 +88,12 @@ public class Interface extends Thread {
             }
            showMessage("while end");
         } while (!ip.equals("0"));
-
+        //TODO exit correctly
         System.exit(0);
+    }
+
+    public synchronized void updateServer(SIPthread s){
+        server=s;
     }
 
     public synchronized void showMessage(String msg) {

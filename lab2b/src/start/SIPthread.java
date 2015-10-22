@@ -22,15 +22,13 @@ public class SIPthread extends Thread {
     private Interface face;
 
 
-    public SIPthread( SIPHandler sh) throws IOException {
+    public SIPthread( SIPHandler sh,Socket socket, Interface face, Boolean isServer) throws IOException {
         this.sh = sh;
-    }
-
-    public void init(Socket socket, Interface face, Boolean isServer){
         this.socket = socket;
         this.face = face;
         this.isServer = isServer;
     }
+
 
     public void run() {
         try {
@@ -50,15 +48,12 @@ public class SIPthread extends Thread {
         }
     }
 
-    public synchronized void hangUp() throws StateException {
-        switch (sh.getState()) {
-            case HANGINGUP:
-                out.println("BYE");
-                break;
-            default:
-                System.err.println("i'm sorry dave i'm afraid i can't do that");
-                throw new StateException("Can't end call now");
-        }
+    public synchronized void hangUp() throws IOException, StateException {
+
+    }
+
+    private  void hangUp(String msgIn) throws StateException {
+
     }
 
     public void call() throws Exception {
@@ -94,16 +89,9 @@ public class SIPthread extends Thread {
                         }
                     }
                     throw new Exception("SIP protocol ERROR");
-                case HANGINGUP:
-                    face.showMessage(msg = in.readLine());
-                    sh.hangUp(msg);
-                    //TODO quit server
-                    face.showMessage("call ended by other party");
-                    out.println("200 OK");
-                    return;
-                default:
-                    throw new Exception("not waiting or dialing");
 
+                default:
+                    hangUp(msg);
             }
 
         }
@@ -133,27 +121,9 @@ public class SIPthread extends Thread {
                     case ANSWERING:
                         sh.pickUpCall(msg);
                         break;
-                    case TALKING:
-                        sh.hangUp(msg);
-                        //TODO quit server
-                        face.showMessage("call ended by other party");
-                        out.println("200 OK");
-                        return;
-                    case HANGINGUP:
-                        sh.hangUp(msg);
-                        try {
-                            out.close();
-                            in.close();
-                            socket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        //TODO quit server
-                        face.showMessage("call ended ");
-                        return;
+
                     default:
-                        out.println("ERROR 500");
-                        throw new Exception("ERROR 500");
+                        hangUp(msg);
 
                 }
             } catch (StateException e) {
