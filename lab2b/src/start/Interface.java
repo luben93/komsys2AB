@@ -72,6 +72,7 @@ public class Interface extends Thread {
                         }
                         break;
                     case TALKING:
+                        showMessage("You have pressed hang up");
                         //TODO: tråden inte startad
                         sh.callEnded();
                         trad.hangUp();
