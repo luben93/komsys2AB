@@ -46,6 +46,11 @@ public class SIPthread extends Thread {
                 call();
 
             }
+        } catch (NullPointerException e) {
+            face.showMessage("Something went wrong reseting");
+            sh.forceWaiting();
+            asu.stopStreaming();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,13 +65,13 @@ public class SIPthread extends Thread {
                 break;
             default:
                 //TODO error handling
-                throw new StateException("wrong state: "+sh.getState());
+                throw new StateException("wrong state: " + sh.getState());
         }
     }
 
     private void hangUp(String inmsg) throws StateException {
 //        face.showMessage(inmsg);
-        switch (sh.getState()){
+        switch (sh.getState()) {
             case TALKING:
                 sh.hangUp(inmsg);
                 out.println("200 OK");
@@ -78,10 +83,11 @@ public class SIPthread extends Thread {
                 //exit thread
                 break;
             default:
-                throw new StateException("wrong state: "+sh.getState()+"\n msg: "+inmsg);
+                throw new StateException("wrong state: " + sh.getState() + "\n msg: " + inmsg);
         }
         try {
             asu.stopStreaming();
+            asu.close();
             out.close();
             in.close();
             socket.close();
@@ -97,14 +103,14 @@ public class SIPthread extends Thread {
 
             switch (sh.getState()) {
                 case WAITING:
-                    out.println("INVITE "+asu.getLocalPort());
+                    out.println("INVITE " + asu.getLocalPort());
                     sh.outgoingCall();
                     break;
                 case DIALING:
                     msg = in.readLine();
                     if (msg.contains("100 TRYING")) {
                         int port = Integer.parseInt(msg.substring(11));
-                        asu.connectTo(socket.getInetAddress(),port);
+                        asu.connectTo(socket.getInetAddress(), port);
                         //TODO connect to port
                         msg = in.readLine();
                         if (msg.equals("180 RINGING")) {
@@ -141,7 +147,7 @@ public class SIPthread extends Thread {
                         int port_peer = Integer.parseInt(msg.substring(7));
                         int port = asu.getLocalPort();
                         out.println("100 TRYING " + port);
-                        asu.connectTo(socket.getInetAddress(),port_peer);
+                        asu.connectTo(socket.getInetAddress(), port_peer);
                         out.println("180 RINGING");
                         asu.startStreaming();
                         out.println("200 OK");
