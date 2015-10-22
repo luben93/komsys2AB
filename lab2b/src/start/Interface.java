@@ -43,6 +43,7 @@ public class Interface extends Thread {
                     showMessage("press 0 enter to hang up");
                     break;
                 default:
+                    showMessage("press 0 enter to reset");
                     break;
             }
             ip = scanner.nextLine();
@@ -79,14 +80,17 @@ public class Interface extends Thread {
                         if (ip.equals("0")) {
                             showMessage("You have pressed hang up");
                             if (isClient) {
-                                //TODO: tråden inte startad
-                                trad.hangUp();//TODO BOOLEAN
+                                trad.hangUp();
                                 isClient = false;
                             } else {
                                 server.hangUp();
                             }
                         }
                         break;
+                    default:
+                        if (ip.equals("0")) {
+                            sh.forceWaiting();
+                        }
                 }
             } catch (NumberFormatException e) {
                 showMessage("You have to write 1 or 2");
