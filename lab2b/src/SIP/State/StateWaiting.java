@@ -13,7 +13,7 @@ public class StateWaiting extends State {
 
     @Override
     public State toAnswer(String msg) throws StateException {
-        if(msg.equals("INVITE")) {
+        if(msg.startsWith("INVITE")) {
             return new StateAnswer();
         }
         throw new StateException("NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");

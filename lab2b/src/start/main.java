@@ -14,7 +14,15 @@ public class main {
     public static void main(String[] args) {
         SIPHandler sh = new SIPHandler();
         int choice = -1;
-        Interface interface_client = new Interface(sh);
+        SIPthread trad = null;
+        try {
+            trad = new SIPthread(sh);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Interface interface_client = new Interface(sh,trad);
+
         interface_client.start();
 
         ServerSocket serverSocket = null;
@@ -30,9 +38,9 @@ public class main {
         while (true) {
             try {
                 clientSocket = serverSocket.accept();
-                SIPthread trad=new SIPthread(clientSocket,true,sh,interface_client);
+                trad.init(clientSocket, interface_client, true);
                 trad.start();
-                interface_client.showMessage("thread started to: "+clientSocket.getInetAddress());
+                interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

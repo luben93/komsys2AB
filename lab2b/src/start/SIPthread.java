@@ -22,11 +22,14 @@ public class SIPthread extends Thread {
     private Interface face;
 
 
-    public SIPthread(Socket socket, boolean isServer, SIPHandler sh, Interface face) throws IOException {
-        this.socket = socket;
+    public SIPthread( SIPHandler sh) throws IOException {
         this.sh = sh;
-        this.isServer = isServer;
+    }
+
+    public void init(Socket socket, Interface face, Boolean isServer){
+        this.socket = socket;
         this.face = face;
+        this.isServer = isServer;
     }
 
     public void run() {
@@ -47,17 +50,26 @@ public class SIPthread extends Thread {
         }
     }
 
-    public void hangUp() throws Exception {
+    public synchronized void hangUp() throws StateException {
         // msg=in.readLine();
         switch (sh.getState()) {
             case HANGINGUP:
                 out.println("BYE");
-                face.showMessage(msg = in.readLine());
-                sh.hangUp(msg);
+
+                try {
+                    face.showMessage(msg = in.readLine());
+                    sh.hangUp(msg);
+                    out.close();
+                    in.close();
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             default:
                 System.err.println("i'm sorry dave i'm afraid i can't do that");
-                throw new Exception("Can't end call now");
+                throw new StateException("Can't end call now");
         }
     }
 
@@ -85,7 +97,7 @@ public class SIPthread extends Thread {
                         if (msg.equals("180 RINGING")) {
                             face.showMessage(msg = in.readLine());
                             if (msg.equals("200 OK")) {
-                                face.showMessage("it worked!!!");
+                                face.showMessage("Press enter to hang up");
                                 sh.callAccepted("TRO");
                                 out.println("ACK");
                                 return;
