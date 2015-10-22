@@ -16,7 +16,7 @@ public class StateAnswer extends State {
         if (msg.equals("ACK")) {
             return new StateTalking();
         }
-        throw new StateException("NOT RECEIVED INVITE, FROM STATE ANSWER TO STATE TALKING");
+        throw new StateException(msg+", NOT RECEIVED INVITE, FROM STATE ANSWER TO STATE TALKING");
 
     }
 }

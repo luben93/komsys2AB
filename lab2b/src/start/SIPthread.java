@@ -15,8 +15,8 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private boolean isServer;
-    private PrintWriter out;
-    private BufferedReader in;
+    private PrintWriter out ;
+    private BufferedReader in ;
     private SIPHandler sh;
     private String msg;
     private Interface face;
@@ -77,9 +77,10 @@ public class SIPthread extends Thread {
     }
 
     public void call() throws Exception {
-        face.showMessage("state: " + sh.getState());
 
-        while (!sh.getState().equals(SIPHandler.StateEvent.TALKING)) {//???? or something else
+        while (true) {//???? or something else
+            face.showMessage("state: " + sh.getState());
+
             switch (sh.getState()) {
                 case WAITING:
                     face.showMessage("sending invite");
@@ -103,13 +104,19 @@ public class SIPthread extends Thread {
                                 face.showMessage("Press enter to hang up");
                                 sh.callAccepted("TRO");
                                 out.println("ACK");
-                                return;
+                                break;
                                 //tryingToStartCall = false;
                             }
                         }
                     }
                     throw new Exception("SIP protocol ERROR");
-
+                case TALKING:
+                    face.showMessage(msg = in.readLine());
+                    sh.hangUp(msg);
+                    //TODO quit server
+                    face.showMessage("call ended by other party");
+                    out.println("200 OK");
+                    return;
                 default:
                     throw new Exception("not waiting or dialing");
 
@@ -117,6 +124,7 @@ public class SIPthread extends Thread {
 
         }
     }
+
 
     private void server() throws Exception {
         face.showMessage("server waiting for INVITE");
@@ -146,7 +154,7 @@ public class SIPthread extends Thread {
                         //TODO quit server
                         face.showMessage("call ended by other party");
                         out.println("200 OK");
-                        break;
+                        return;
                     default:
                         out.println("ERROR 500");
                         throw new Exception("ERROR 500");
