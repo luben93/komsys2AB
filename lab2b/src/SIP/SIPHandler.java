@@ -23,7 +23,7 @@ public class SIPHandler {
     public void incomingCall(String msg) throws StateException {
         currentState=currentState.toAnswer(msg);
     }
-
+//130.229.150.224
     public void outgoingCall(){
         currentState=currentState.toDial();
     }

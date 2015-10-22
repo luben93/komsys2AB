@@ -16,7 +16,7 @@ public class StateTalking extends State{
         if(msg.equals("BYE")) {
             return new StateWaiting();
         }
-        throw new StateException("NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
+        throw new StateException(msg+", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
     }
 
     @Override

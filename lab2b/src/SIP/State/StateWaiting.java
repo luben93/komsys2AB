@@ -16,7 +16,7 @@ public class StateWaiting extends State {
         if(msg.startsWith("INVITE")) {
             return new StateAnswer();
         }
-        throw new StateException("NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");
+        throw new StateException(msg+", NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");
     }
 
     @Override

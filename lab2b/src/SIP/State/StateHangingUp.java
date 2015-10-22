@@ -16,6 +16,6 @@ public class StateHangingUp extends State{
         if(msg.equals("200 OK")){
             return new StateWaiting();
         }
-        throw new StateException("NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
+        throw new StateException(msg+", NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
     }
 }
