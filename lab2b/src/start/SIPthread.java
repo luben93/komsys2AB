@@ -109,7 +109,7 @@ public class SIPthread extends Thread {
                         if (msg.equals("180 RINGING")) {
                             msg = in.readLine();
                             if (msg.equals("200 OK")) {
-                                face.showMessage("Press enter to hang up");
+                                face.showMessage("Press 0 enter to hang up");
                                 sh.callAccepted("TRO");
                                 out.println("ACK");
                                 break;
@@ -143,7 +143,7 @@ public class SIPthread extends Thread {
                         //TODO check all is correct
                         out.println("200 OK");
                         //TODO get out of loop here
-                        face.showMessage("call connected, press enter to hang up");
+                        face.showMessage("call connected, press 0 enter to hang up");
                         break;
                     case ANSWERING:
                         sh.pickUpCall(msg);

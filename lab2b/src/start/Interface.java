@@ -33,14 +33,14 @@ public class Interface extends Thread {
         do {
             showMessage("state: " + sh.getState());
 
-            showMessage("type 0 to quit");
+
             //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             switch (sh.getState()) {
                 case WAITING:
                     showMessage("type IP to call");
                     break;
                 case TALKING:
-                    showMessage("press enter to hang up");
+                    showMessage("press 0 enter to hang up");
                     break;
                 default:
                     break;
@@ -78,11 +78,9 @@ public class Interface extends Thread {
                         if (isClient) {
                             //TODO: tråden inte startad
                             trad.hangUp();//TODO BOOLEAN
-                            showMessage("End");
                             isClient = false;
                         } else {
                             server.hangUp();
-                            showMessage("End");
                         }
                         break;
                 }
@@ -91,7 +89,6 @@ public class Interface extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            showMessage("while end");
         } while (!ip.equals("0"));
         //TODO exit correctly
         System.exit(0);
