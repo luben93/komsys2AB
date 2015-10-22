@@ -46,7 +46,9 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-
+            if(ip.equals("")){
+                ip=" ";
+            }
             try {
                 //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
