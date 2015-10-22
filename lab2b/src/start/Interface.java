@@ -76,12 +76,10 @@ public class Interface extends Thread {
                         showMessage("You have pressed hang up");
                         if(isClient) {
                             //TODO: tråden inte startad
-                            sh.callEnded();
                             trad.hangUp();//TODO BOOLEAN
                             showMessage("End");
                             isClient=false;
                         }else{
-                            sh.callEnded();
                             server.hangUp();
                             showMessage("End");
                         }
