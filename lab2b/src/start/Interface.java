@@ -91,9 +91,9 @@ public class Interface extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } while (!ip.equals("0"));
+        } while (true);
         //TODO exit correctly
-        System.exit(0);
+        // System.exit(0);
     }
 
     public synchronized void updateServer(SIPthread s) {
