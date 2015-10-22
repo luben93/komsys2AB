@@ -137,7 +137,7 @@ public class SIPthread extends Thread {
                 switch (sh.getState()) {
                     case WAITING:
                         sh.incomingCall(msg);
-                        int port_peer = Integer.parseInt(msg.substring(6));
+                        int port_peer = Integer.parseInt(msg.substring(7));
                         int port = asu.getLocalPort();
                         out.println("100 TRYING " + port);
                         asu.connectTo(socket.getInetAddress(),port_peer);
