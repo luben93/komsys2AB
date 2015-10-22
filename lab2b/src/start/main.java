@@ -12,36 +12,44 @@ import java.net.Socket;
 
 public class main {
     public static void main(String[] args) {
-        SIPHandler sh = new SIPHandler();
-        int choice = -1;
-        SIPthread trad = null;
-
-        Interface interface_client = new Interface(sh);
-        interface_client.start();
-
+        Socket clientSocket = null;
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(4321);
-        } catch (IOException e) {
-            System.err.println("Could not listen on port: " + 4321);
-            System.exit(1);
-        }
-        Socket clientSocket = null;
-        System.out.println("Waiting for connection.....");
+            SIPHandler sh = new SIPHandler();
+            int choice = -1;
+            SIPthread trad = null;
 
-        while (true) {
+            Interface interface_client = new Interface(sh);
+            interface_client.start();
+
             try {
-                clientSocket = serverSocket.accept();
-                trad= new SIPthread(sh, clientSocket, interface_client, true);
-                trad.start();
-                interface_client.updateServer(trad);
+                serverSocket = new ServerSocket(4321);
+            } catch (IOException e) {
+                System.err.println("Could not listen on port: " + 4321);
+                System.exit(1);
+            }
 
-                interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
+            System.out.println("Waiting for connection.....");
+
+            while (true) {
+                try {
+                    clientSocket = serverSocket.accept();
+                    trad = new SIPthread(sh, clientSocket, interface_client, true);
+                    trad.start();
+                    interface_client.updateServer(trad);
+
+                    interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } finally {
+            try {
+                clientSocket.close();
+                serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 }

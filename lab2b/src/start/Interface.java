@@ -16,25 +16,18 @@ public class Interface extends Thread {
 
     public Interface(SIPHandler sh) {
         this.sh = sh;
-        // this.server = server;
     }
 
     @Override
     public void run() {
-        int choice = -1;
         Scanner scanner = new Scanner(System.in);
         Socket s = null;
-//        SIPthread trad =null;
         String ip = "";
-        // boolean call = false;
         boolean isClient = false;
         SIPthread trad = null;
 
         do {
             showMessage("state: " + sh.getState());
-
-
-            //TODO: vänta på att personen ska svara och vänta på att starta upp audiostream
             switch (sh.getState()) {
                 case WAITING:
                     showMessage("type IP to call\nor 0 to exit");
@@ -51,32 +44,21 @@ public class Interface extends Thread {
                 ip=" ";
             }
             try {
-                //choice = Integer.parseInt(sentence);
                 switch (sh.getState()) {
-
                     case WAITING:
                         if(ip.equals("0")){
                             System.exit(0);
                         }
-                        // showMessage("Write which ip you want to call.");
-                        // String invite_msg = scanner.nextLine();
                         try {
                             s = new Socket(ip, 4321);
                             trad = new SIPthread(sh, s, this, false);
                             trad.start();
                             isClient = true;
-//                            trad.call();
-
                             showMessage("Calling ... ");
-                            // sh.invokeReceivedInvite();
-
-                            //call = true;
                         } catch (UnknownHostException e) {
                             showMessage("The ip you entered is not correct");
-                            //  e.printStackTrace();
                         } catch (IOException e) {
                             showMessage("Could not connect to the ip adress");
-                            //e.printStackTrace();
                         }
                         break;
                     case TALKING:
@@ -101,8 +83,6 @@ public class Interface extends Thread {
                 e.printStackTrace();
             }
         } while (true);
-        //TODO exit correctly
-        // System.exit(0);
     }
 
     public synchronized void updateServer(SIPthread s) {
