@@ -85,6 +85,7 @@ public class SIPthread extends Thread {
             out.close();
             in.close();
             socket.close();
+            face.showMessage("\nCall ended\nType IP to call");
         } catch (IOException e) {
             e.printStackTrace();
         }

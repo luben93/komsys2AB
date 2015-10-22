@@ -87,6 +87,8 @@ public class Interface extends Thread {
                             }
                         }
                         break;
+                    case HANGINGUP:
+                        break;
                 }
             } catch (NumberFormatException e) {
                 showMessage("You have to write 1 or 2");
