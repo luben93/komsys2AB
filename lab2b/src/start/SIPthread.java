@@ -61,7 +61,7 @@ public class SIPthread extends Thread {
     }
 
     private void hangUp(String inmsg) throws StateException {
-        face.showMessage(inmsg);
+//        face.showMessage(inmsg);
         switch (sh.getState()){
             case TALKING:
                 sh.hangUp(inmsg);
@@ -87,27 +87,27 @@ public class SIPthread extends Thread {
 
     public void call() throws Exception {
         while (true) {//???? or something else
-            face.showMessage("state: " + sh.getState());
+//            face.showMessage("state: " + sh.getState());
 
             switch (sh.getState()) {
                 case WAITING:
-                    face.showMessage("sending invite");
+//                    face.showMessage("sending invite");
                     //TODO start audio here, and get port number, using 57654 for now
                     //int localport = 57654;
                     out.println("INVITE 57654");// + localport);
-                    face.showMessage("sending INVITE sent ");
+//                    face.showMessage("sending INVITE sent ");
 
                     sh.outgoingCall();
 
                     break;
                 case DIALING:
-                    face.showMessage(msg = in.readLine());
+                    msg = in.readLine();
                     if (msg.contains("100 TRYING")) {
                         int port = Integer.parseInt(msg.substring(11));
                         //TODO connect to port
-                        face.showMessage(msg = in.readLine());
+                        msg = in.readLine();
                         if (msg.equals("180 RINGING")) {
-                            face.showMessage(msg = in.readLine());
+                            msg = in.readLine();
                             if (msg.equals("200 OK")) {
                                 face.showMessage("Press enter to hang up");
                                 sh.callAccepted("TRO");
@@ -129,12 +129,9 @@ public class SIPthread extends Thread {
 
 
     private void server() throws Exception {
-        face.showMessage("server waiting for INVITE");
         while (true) {
             try {
                 msg = in.readLine();
-                face.showMessage(msg);
-
                 switch (sh.getState()) {
                     case WAITING:
                         sh.incomingCall(msg);
