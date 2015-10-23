@@ -101,14 +101,7 @@ public class Interface extends Thread {
                 System.err.println("wrong selection");
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                    in.close();
-                    s.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
         } while (true);
     }
