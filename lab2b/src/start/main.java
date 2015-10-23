@@ -47,7 +47,7 @@ public class main {
         } finally {
             try {
                 trad.close();
-                clientSocket.close():
+                clientSocket.close();
                 serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
