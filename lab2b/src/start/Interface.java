@@ -51,7 +51,7 @@ public class Interface extends Thread {
                         }
                         try {
                             s = new Socket(ip, 4321);
-                            trad = new SIPthread(sh, s, this, false);
+                            trad = new SIPthread(s, sh);
                             trad.start();
                             isClient = true;
                             showMessage("Calling ... ");

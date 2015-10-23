@@ -20,14 +20,14 @@ public class SIPthread extends Thread {
     private BufferedReader in;
     private SIPHandler sh;
     private String msg;
-    private Interface face;
+  //  private Interface face;
     private AudioStreamUDP asu;
 
 
-    public SIPthread(SIPHandler sh, Socket socket, Interface face, Boolean isServer) throws IOException {
+    public SIPthread(Socket socket,SIPHandler sh) throws IOException {
         this.sh = sh;
         this.socket = socket;
-        this.face = face;
+//        this.face = face;
         this.isServer = isServer;
     }
 
@@ -38,18 +38,19 @@ public class SIPthread extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            asu = new AudioStreamUDP();
-            if (isServer) {
-                server();
-            } else {
-                // client();
-                call();
-
-            }
+            //asu = new AudioStreamUDP();
+//            if (isServer) {
+//                server();
+//            } else {
+//                 client();
+//                call();
+//
+//            }
+            sh.serverReady(in,out,socket.getInetAddress());
         } catch (NullPointerException e) {
-            face.showMessage("Something went wrong reseting");
+//            face.showMessage("Something went wrong reseting");
             sh.forceWaiting();
-            asu.stopStreaming();
+//            asu.stopStreaming();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +61,7 @@ public class SIPthread extends Thread {
 
         switch (sh.getState()) {
             case TALKING:
-                out.println("BYE");
+//                out.println("BYE");
                 sh.callEnded();
                 break;
             default:
@@ -74,7 +75,7 @@ public class SIPthread extends Thread {
         switch (sh.getState()) {
             case TALKING:
                 sh.hangUp(inmsg);
-                out.println("200 OK");
+//                out.println("200 OK");
                 //TODO turn off audio
                 break;
             case HANGINGUP:
@@ -86,12 +87,12 @@ public class SIPthread extends Thread {
                 throw new StateException("wrong state: " + sh.getState() + "\n msg: " + inmsg);
         }
         try {
-            asu.stopStreaming();
-            asu.close();
-            out.close();
-            in.close();
+//            asu.stopStreaming();
+//            asu.close();
+//            out.close();
+//            in.close();
             socket.close();
-            face.showMessage("\nCall ended\nType IP to call");
+//            face.showMessage("\nCall ended\nType IP to call");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,33 +104,33 @@ public class SIPthread extends Thread {
 
             switch (sh.getState()) {
                 case WAITING:
-                    out.println("INVITE " + asu.getLocalPort());
+//                    out.println("INVITE " + asu.getLocalPort());
                     sh.outgoingCall();
                     break;
                 case DIALING:
-                    msg = in.readLine();
-                    if (msg.contains("100 TRYING")) {
-                        int port = Integer.parseInt(msg.substring(11));
-                        asu.connectTo(socket.getInetAddress(), port);
-                        //TODO connect to port
-                        msg = in.readLine();
-                        if (msg.equals("180 RINGING")) {
-
-                            msg = in.readLine();
-                            if (msg.equals("200 OK")) {
-                                face.showMessage("Press 0 enter to hang up");
+//                    msg = in.readLine();
+//                    if (msg.contains("100 TRYING")) {
+//                        int port = Integer.parseInt(msg.substring(11));
+//                        asu.connectTo(socket.getInetAddress(), port);
+//                        TODO connect to port
+//                        msg = in.readLine();
+//                        if (msg.equals("180 RINGING")) {
+//
+//                            msg = in.readLine();
+//                            if (msg.equals("200 OK")) {
+//                                face.showMessage("Press 0 enter to hang up");
                                 sh.callAccepted("TRO");
-                                out.println("ACK");
-                                asu.startStreaming();
+//                                out.println("ACK");
+//                                asu.startStreaming();
                                 break;
                                 //tryingToStartCall = false;
-                            }
-                        }
-                    }
-                    throw new Exception("SIP protocol ERROR");
+//                            }
+//                        }
+//                    }
+//                    throw new Exception("SIP protocol ERROR");
 
                 default:
-                    hangUp(in.readLine());
+                    hangUp();//in.readLine());
                     return;
             }
 
@@ -140,19 +141,19 @@ public class SIPthread extends Thread {
     private void server() throws Exception {
         while (true) {
             try {
-                msg = in.readLine();
+//                msg = in.readLine();
                 switch (sh.getState()) {
                     case WAITING:
                         sh.incomingCall(msg);
-                        int port_peer = Integer.parseInt(msg.substring(7));
-                        int port = asu.getLocalPort();
-                        out.println("100 TRYING " + port);
-                        asu.connectTo(socket.getInetAddress(), port_peer);
-                        out.println("180 RINGING");
-                        asu.startStreaming();
-                        out.println("200 OK");
+//                        int port_peer = Integer.parseInt(msg.substring(7));
+//                        int port = asu.getLocalPort();
+//                        out.println("100 TRYING " + port);
+//                        asu.connectTo(socket.getInetAddress(), port_peer);
+//                        out.println("180 RINGING");
+//                        asu.startStreaming();
+//                        out.println("200 OK");
                         //TODO check all is correct
-                        face.showMessage("call connected, press 0 enter to hang up");
+//                        face.showMessage("call connected, press 0 enter to hang up");
                         break;
                     case ANSWERING:
                         sh.pickUpCall(msg);

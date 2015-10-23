@@ -2,25 +2,39 @@ package SIP.State;
 
 import SIP.SIPHandler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * Created by Julia on 2015-10-16.
  */
-public class StateTalking extends State{
+class StateTalking extends State {
     @Override
     public SIPHandler.StateEvent getStateName() {
         return SIPHandler.StateEvent.TALKING;
     }
 
     @Override
-    public State toWait(String msg) throws StateException {
-        if(msg.equals("BYE")) {
-            return new StateWaiting();
+    public State toWait(BufferedReader in,PrintWriter out) throws StateException {
+        try {
+            String msg = in.readLine();
+
+            if (msg.equals("BYE")) {
+                out.println("200 OK");
+                return new StateWaiting();
+            }
+
+            throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
+        } catch (IOException e) {
+            throw new StateException("IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
+
         }
-        throw new StateException(msg+", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
     }
 
     @Override
-    public State toHangUp(){
+    public State toHangUp(PrintWriter out){
+        out.println("BYE");
         return new StateHangingUp();
     }
 }

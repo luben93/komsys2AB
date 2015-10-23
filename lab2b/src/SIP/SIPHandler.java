@@ -4,6 +4,11 @@ import SIP.State.State;
 import SIP.State.StateException;
 import SIP.State.StateWaiting;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+
 /**
  * Created by Julia on 2015-10-13.
  */
@@ -12,40 +17,48 @@ public class SIPHandler {
 
     private State currentState;
 
-    public SIPHandler() {
-        currentState = new StateWaiting();
+    public SIPHandler() throws IOException{
+       currentState = new StateWaiting();
     }
 
     public StateEvent getState() {
         return currentState.getStateName();
     }
 
-    public void incomingCall(String msg) throws StateException {
-        currentState=currentState.toAnswer(msg);
+   /* public void incomingCall(BufferedReader in,PrintWriter out,InetAddress ip) throws IOException,StateException {
+        currentState=currentState.toAnswer(in,out,ip);
     }
-//130.229.150.224
-    public void outgoingCall(){
-        currentState=currentState.toDial();
+*/
+    public void outgoingCall(BufferedReader b,PrintWriter out,InetAddress ip)throws StateException{
+        currentState=currentState.toDial(out);
+        currentState=currentState.toTalk(b,out,ip);
+        currentState=currentState.toWait(b,out);
     }
-
-    public void pickUpCall(String msg) throws StateException {
-        currentState=currentState.toTalk(msg);
-    }
-
-    public void callAccepted(String msg) throws StateException {
-        currentState=currentState.toTalk(msg);
+/*
+    public void pickUpCall(BufferedReader b) throws StateException {
+        currentState=currentState.toTalk(b);
     }
 
-    public void hangUp(String msg) throws StateException {
-        currentState=currentState.toWait(msg);
+    public void callAccepted(BufferedReader in) throws StateException {
+        currentState=currentState.toTalk(in);
     }
 
-    public void callEnded(){
-        currentState=currentState.toHangUp();
+    public void hangUp(BufferedReader b) throws StateException {
+        currentState=currentState.toWait(b);
+    }
+*/
+    public void callEnded(PrintWriter p){
+        currentState=currentState.toHangUp(p);
     }
 
     public void forceWaiting(){
         currentState=new StateWaiting();
+    }
+
+    public void serverReady(BufferedReader b,PrintWriter p,InetAddress ip)throws StateException{
+        currentState=currentState.toAnswer(b, p,ip);
+        currentState=currentState.toTalk(b,p);
+        currentState=currentState.toWait(b,p);
     }
 
 }

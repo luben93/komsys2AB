@@ -2,29 +2,44 @@ package SIP.State;
 
 import SIP.SIPHandler;
 
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+
 /**
  * Created by Julia on 2015-10-13.
  */
 public abstract class State {
+//    AudioStreamUDP asu;
+//    PrintWriter out;
+//    BufferedReader in;
+//    InetAddress ip;
+//    Interface face;
+//    Socket s;
+
     public abstract SIPHandler.StateEvent getStateName();
 
-    public State toDial() {
+    public State toDial(PrintWriter out) {
         return this;
     }
 
-    public State toAnswer(String msg) throws StateException {
+    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
         return this;
     }
 
-    public State toTalk(String msg)  throws StateException {
+    public State toTalk(BufferedReader b,PrintWriter p, InetAddress ip) throws StateException {
         return this;
     }
 
-    public State toHangUp() {
+    public State toTalk(BufferedReader b,PrintWriter p) throws StateException {
         return this;
     }
 
-    public State toWait(String msg) throws StateException {
+    public State toHangUp(PrintWriter p) {
+        return this;
+    }
+
+    public State toWait(BufferedReader b,PrintWriter p) throws StateException {
         return this;
     }
 
