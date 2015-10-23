@@ -22,6 +22,7 @@ public class main {
             Interface interface_client = new Interface(sh);
             interface_client.start();
 
+
             try {
                 serverSocket = new ServerSocket(4321);
             } catch (IOException e) {
@@ -34,15 +35,17 @@ public class main {
             while (true) {
                 try {
                     clientSocket = serverSocket.accept();
-                    trad = new SIPthread(sh, clientSocket, interface_client, true);
+                    trad = new SIPthread(clientSocket, sh);
                     trad.start();
                     interface_client.updateServer(trad);
 
-                    interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
+//                    interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             try {
                 clientSocket.close();

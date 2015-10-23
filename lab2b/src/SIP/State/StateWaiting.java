@@ -30,6 +30,7 @@ public class StateWaiting extends State {
     @Override
     public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
         try {
+
             String msg = in.readLine();
             if (in.readLine().startsWith("INVITE")) {
                 int port_peer = Integer.parseInt(msg.substring(7));
@@ -51,8 +52,27 @@ public class StateWaiting extends State {
 
     @Override
     public State toDial(PrintWriter out) {
-        out.println("INVITE " + asu.getLocalPort());
-        return new StateDialing(asu);
+//        while (true) {
+//        Scanner scanner = new Scanner(System.in);
+//            System.out.println("type the IP to call\n or 0 to exit");
+//            String ip = scanner.nextLine();
+//            if (ip.equals("")) {
+//                ip = " ";
+//            } else if (ip.equals("0")) {
+//                System.exit(0);
+//            }
+//            try {
+//                Socket cli = new Socket(ip, 4321);
+//
+//                PrintWriter out = new PrintWriter(cli.getOutputStream());
+                out.println("INVITE " + asu.getLocalPort());
+                return new StateDialing(asu);
+//            } catch (UnknownHostException e) {
+//                System.err.println("The ip you entered is not correct");
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
     }
 
 }

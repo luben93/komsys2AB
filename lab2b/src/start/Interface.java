@@ -2,7 +2,10 @@ package start;
 
 import SIP.SIPHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -23,20 +26,23 @@ public class Interface extends Thread {
         Scanner scanner = new Scanner(System.in);
         Socket s = null;
         String ip = "";
+        PrintWriter out=null;
         boolean isClient = false;
-        SIPthread trad = null;
+//        SIPthread trad = null;
 
         do {
-            showMessage("state: " + sh.getState());
+//            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("state: " + sh.getState());
             switch (sh.getState()) {
                 case WAITING:
-                    showMessage("type IP to call\nor 0 to exit");
+                    System.out.println("type IP to call\nor 0 to exit");
                     break;
                 case TALKING:
-                    showMessage("press 0 enter to hang up");
+                    System.out.println("press 0 enter to hang up");
                     break;
                 default:
-                    showMessage("press 0 enter to reset");
+                    System.out.println("press 0 enter to reset");
                     break;
             }
             ip = scanner.nextLine();
@@ -51,21 +57,31 @@ public class Interface extends Thread {
                         }
                         try {
                             s = new Socket(ip, 4321);
-                            trad = new SIPthread(s, sh);
-                            trad.start();
-                            isClient = true;
-                            showMessage("Calling ... ");
+//                            trad = new SIPthread(s, sh);
+//                            trad.start();
+//                            isClient = true;
+                            BufferedReader in=new BufferedReader(new InputStreamReader(s.getInputStream()));
+                            out=new PrintWriter(s.getOutputStream(),true);
+                            sh.outgoingCall(in,out,s.getInetAddress());
+                            sh.callAccepted(in,out);
+                            System.out.println("Calling ... ");
+                            isClient=true;
+//                            System.out.println("press 0 enter to hang up");
+//                            while(!ip.equals("0")){
+//                                ip = scanner.nextLine();
+//                                sh.hangUp(out);
+//                            }
                         } catch (UnknownHostException e) {
-                            showMessage("The ip you entered is not correct");
+                            System.out.println("The ip you entered is not correct");
                         } catch (IOException e) {
-                            showMessage("Could not connect to the ip adress");
+                            System.out.println("Could not connect to the ip adress");
                         }
                         break;
                     case TALKING:
                         if (ip.equals("0")) {
-                            showMessage("You have pressed hang up");
+                            System.out.println("You have pressed hang up");
                             if (isClient) {
-                                trad.hangUp();
+                                sh.hangUp(out);
                                 isClient = false;
                             } else {
                                 server.hangUp();
@@ -78,18 +94,18 @@ public class Interface extends Thread {
                         }
                 }
             } catch (NumberFormatException e) {
-                showMessage("You have to write 1 or 2");
+                System.err.println("wrong selection");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } while (true);
     }
-
+//
     public synchronized void updateServer(SIPthread s) {
         server = s;
     }
-
-    public synchronized void showMessage(String msg) {
-        System.out.println(msg);
-    }
+//
+//    public synchronized void showMessage(String msg) {
+//        System.out.println(msg);
+//    }
 }

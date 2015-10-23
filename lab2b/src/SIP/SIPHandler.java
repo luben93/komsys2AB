@@ -32,22 +32,23 @@ public class SIPHandler {
     public void outgoingCall(BufferedReader b,PrintWriter out,InetAddress ip)throws StateException{
         currentState=currentState.toDial(out);
         currentState=currentState.toTalk(b,out,ip);
-        currentState=currentState.toWait(b,out);
+//        currentState=currentState.toWait(b,out);
     }
 /*
     public void pickUpCall(BufferedReader b) throws StateException {
         currentState=currentState.toTalk(b);
     }
-
-    public void callAccepted(BufferedReader in) throws StateException {
-        currentState=currentState.toTalk(in);
+*/
+    public void callAccepted(BufferedReader in,PrintWriter out) throws StateException {
+//        currentState=currentState.toTalk(in,out);
+        currentState=currentState.toWait(in,out);
     }
-
+/*
     public void hangUp(BufferedReader b) throws StateException {
         currentState=currentState.toWait(b);
     }
 */
-    public void callEnded(PrintWriter p){
+    public void hangUp(PrintWriter p){
         currentState=currentState.toHangUp(p);
     }
 
@@ -58,7 +59,7 @@ public class SIPHandler {
     public void serverReady(BufferedReader b,PrintWriter p,InetAddress ip)throws StateException{
         currentState=currentState.toAnswer(b, p,ip);
         currentState=currentState.toTalk(b,p);
-        currentState=currentState.toWait(b,p);
+//        currentState=currentState.toWait(b,p);
     }
 
 }
