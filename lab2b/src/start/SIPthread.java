@@ -34,7 +34,11 @@ public class SIPthread extends Thread {
             sh.callAccepted(in, out);
             System.out.println("Calling ... ");
         } catch (NullPointerException e) {
-            sh.forceWaiting();
+            try {
+                sh.forceWaiting();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

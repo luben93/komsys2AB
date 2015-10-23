@@ -14,11 +14,12 @@ import java.net.InetAddress;
  */
 public class SIPHandler {
     public enum StateEvent {WAITING, ANSWERING, DIALING, TALKING, HANGINGUP}
-
+    private AudioStreamUDP asu;
     private State currentState;
 
     public SIPHandler() throws IOException {
         currentState = new StateWaiting();
+        asu=new AudioStreamUDP();
     }
 
     public StateEvent getState() {
@@ -31,9 +32,9 @@ public class SIPHandler {
  */
     public void outgoingCall(BufferedReader b, PrintWriter out, InetAddress ip) throws StateException {
         System.out.println("to dial");
-        currentState = currentState.toDial(out);
+        currentState = currentState.toDial(out,asu);
         System.out.println("to talk");
-        currentState = currentState.toTalk(b, out, ip);
+        currentState = currentState.toTalk(b, out, ip,asu);
 //        currentState=currentState.toWait(b,out);
     }
 
@@ -45,7 +46,7 @@ public class SIPHandler {
     public void callAccepted(BufferedReader in, PrintWriter out) throws StateException {
 //        currentState=currentState.toTalk(in,out);
         System.out.println("to wait");
-        currentState = currentState.toWait(in, out);
+        currentState = currentState.toWait(in, out,asu);
     }
 
     /*
@@ -58,13 +59,16 @@ public class SIPHandler {
         currentState = currentState.toHangUp(p);
     }
 
-    public void forceWaiting() {
+    public void forceWaiting() throws IOException {
+        asu.close();
+        asu=new AudioStreamUDP();
         currentState = new StateWaiting();
+
     }
 
     public void serverReady(BufferedReader b, PrintWriter p, InetAddress ip) throws StateException {
         System.out.println("to answer");
-        currentState = currentState.toAnswer(b, p, ip);
+        currentState = currentState.toAnswer(b, p, ip,asu);
         System.out.println("to talk");
         currentState = currentState.toTalk(b);
 //        currentState=currentState.toWait(b,p);

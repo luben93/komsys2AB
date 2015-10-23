@@ -12,15 +12,7 @@ import java.net.InetAddress;
  * Created by Julia on 2015-10-13.
  */
 public class StateWaiting extends State {
-    private AudioStreamUDP asu;
 
-    public StateWaiting() {
-        try {
-            asu = new AudioStreamUDP();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public SIPHandler.StateEvent getStateName() {
@@ -28,7 +20,7 @@ public class StateWaiting extends State {
     }
 
     @Override
-    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
+    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip,AudioStreamUDP asu) throws StateException {
         try {
 
             String msg = in.readLine();
@@ -55,7 +47,7 @@ public class StateWaiting extends State {
 
 
     @Override
-    public State toDial(PrintWriter out) {
+    public State toDial(PrintWriter out,AudioStreamUDP asu) {
 //        while (true) {
 //        Scanner scanner = new Scanner(System.in);
 //            System.out.println("type the IP to call\n or 0 to exit");

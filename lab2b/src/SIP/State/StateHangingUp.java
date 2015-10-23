@@ -1,5 +1,6 @@
 package SIP.State;
 
+import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
 
 import java.io.BufferedReader;
@@ -16,23 +17,23 @@ class StateHangingUp extends State {
     }
 
     @Override
-    public State toWait(BufferedReader in, PrintWriter out) throws StateException {
+    public State toWait(BufferedReader in, PrintWriter out, AudioStreamUDP asu) throws StateException {
         try {
             String msg = in.readLine();
             System.out.println(msg);
             if (msg.equals("200 OK")) {
                 asu.stopStreaming();
-                asu.close();
+//                asu.close();
                 return new StateWaiting();
             } else if (msg.equals("BYE")) {
                 asu.stopStreaming();
-                asu.close();
+                //asu.close();
                 out.println("201 OK");//but its not ok
                 return new StateWaiting();
             }
             if (msg.equals("201 OK")) {
                 asu.stopStreaming();
-                asu.close();
+//                asu.close();
                 return new StateWaiting();
             }
             throw new StateException(msg + ", NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");

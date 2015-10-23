@@ -1,5 +1,6 @@
 package SIP.State;
 
+import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
 
 import java.io.BufferedReader;
@@ -16,14 +17,14 @@ class StateTalking extends State {
     }
 
     @Override
-    public State toWait(BufferedReader in, PrintWriter out) throws StateException {
+    public State toWait(BufferedReader in, PrintWriter out, AudioStreamUDP asu) throws StateException {
         try {
             String msg = in.readLine();
             System.out.println(msg);
             if (msg.equals("BYE")) {
                 asu.stopStreaming();
                 out.println("200 OK");
-                asu.close();
+//                asu.close();
                 return new StateWaiting();
             }
 

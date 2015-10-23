@@ -1,5 +1,6 @@
 package SIP.State;
 
+import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ class StateDialing extends State {
 
 
     @Override
-    public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
+    public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip, AudioStreamUDP asu) throws StateException {
         try {
             String msg = in.readLine();
             System.out.println(msg);

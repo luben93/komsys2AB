@@ -11,7 +11,7 @@ import java.net.InetAddress;
  * Created by Julia on 2015-10-13.
  */
 public abstract class State {
-    AudioStreamUDP asu;
+//    AudioStreamUDP asu;
 //    PrintWriter out;
 //    BufferedReader in;
 //    InetAddress ip;
@@ -20,15 +20,15 @@ public abstract class State {
 
     public abstract SIPHandler.StateEvent getStateName();
 
-    public State toDial(PrintWriter out) {
+    public State toDial(PrintWriter out,AudioStreamUDP asu) {
         return this;
     }
 
-    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
+    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip,AudioStreamUDP asu) throws StateException {
         return this;
     }
 
-    public State toTalk(BufferedReader b, PrintWriter p, InetAddress ip) throws StateException {
+    public State toTalk(BufferedReader b, PrintWriter p, InetAddress ip, AudioStreamUDP asu) throws StateException {
         return this;
     }
 
@@ -40,7 +40,7 @@ public abstract class State {
         return this;
     }
 
-    public State toWait(BufferedReader b, PrintWriter p) throws StateException {
+    public State toWait(BufferedReader b, PrintWriter p,AudioStreamUDP asu) throws StateException {
         return this;
     }
 
