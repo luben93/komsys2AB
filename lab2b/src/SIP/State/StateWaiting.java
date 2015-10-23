@@ -32,6 +32,7 @@ public class StateWaiting extends State {
         try {
 
             String msg = in.readLine();
+            System.out.println(msg);
             if (in.readLine().startsWith("INVITE")) {
                 int port_peer = Integer.parseInt(msg.substring(7));
                 int port = asu.getLocalPort();

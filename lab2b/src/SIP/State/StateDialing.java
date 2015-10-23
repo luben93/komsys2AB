@@ -21,6 +21,7 @@ class StateDialing extends State {
     public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
         try {
             String msg = in.readLine();
+            System.out.println(msg);
             if (ip.equals(InetAddress.getLocalHost())) {
                 throw new StateException("error you cant talk with yourself");
             }

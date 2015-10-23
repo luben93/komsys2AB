@@ -18,6 +18,7 @@ class StateAnswer extends State {
     public State toTalk(BufferedReader in) throws StateException {
         try {
             String msg = in.readLine();
+            System.out.println(msg);
             if (msg.equals("ACK")) {
                 return new StateTalking();
             }
