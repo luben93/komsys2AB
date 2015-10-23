@@ -20,9 +20,17 @@ class StateHangingUp extends State {
         try {
             String msg = in.readLine();
             if (msg.equals("200 OK")) {
+                asu.stopStreaming();
+                asu.close();
                 return new StateWaiting();
             }else if (msg.equals("BYE")) {
-                out.println("200 OK");//but its not ok
+                asu.stopStreaming();
+                asu.close();
+                out.println("201 OK");//but its not ok
+                return new StateWaiting();
+            }if (msg.equals("201 OK")) {
+                asu.stopStreaming();
+                asu.close();
                 return new StateWaiting();
             }
             throw new StateException(msg + ", NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");

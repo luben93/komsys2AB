@@ -27,7 +27,7 @@ public class SIPthread extends Thread {
         try {
              out = new PrintWriter(socket.getOutputStream(), true);
 
-            BufferedReader in = new BufferedReader(
+             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
 
             sh.serverReady(in, out, socket.getInetAddress());
@@ -42,6 +42,18 @@ public class SIPthread extends Thread {
 
     public synchronized void hangUp(){
         sh.hangUp(out);
+        close();
+    }
+
+    public synchronized void close(){
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

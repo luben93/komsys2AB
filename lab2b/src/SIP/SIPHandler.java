@@ -58,7 +58,7 @@ public class SIPHandler {
 
     public void serverReady(BufferedReader b,PrintWriter p,InetAddress ip)throws StateException{
         currentState=currentState.toAnswer(b, p,ip);
-        currentState=currentState.toTalk(b,p);
+        currentState=currentState.toTalk(b);
 //        currentState=currentState.toWait(b,p);
     }
 

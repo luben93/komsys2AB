@@ -1,6 +1,5 @@
 package SIP.State;
 
-import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
 
 import java.io.BufferedReader;
@@ -12,11 +11,6 @@ import java.net.InetAddress;
  * Created by Julia on 2015-10-16.
  */
 class StateDialing extends State {
-    private AudioStreamUDP asu;
-
-    public StateDialing(AudioStreamUDP a) {
-        asu=a;
-    }
     @Override
     public SIPHandler.StateEvent getStateName() {
         return SIPHandler.StateEvent.DIALING;
@@ -27,7 +21,9 @@ class StateDialing extends State {
     public State toTalk(BufferedReader in,PrintWriter out, InetAddress ip) throws StateException {
         try {
             String msg = in.readLine();
-
+            if(ip.equals(InetAddress.getLocalHost())){
+                throw new StateException("error you cant talk with yourself");
+            }
             if (msg.contains("100 TRYING")) {
 
                 int port = Integer.parseInt(msg.substring(11));

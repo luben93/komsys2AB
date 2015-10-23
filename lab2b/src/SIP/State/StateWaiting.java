@@ -66,7 +66,7 @@ public class StateWaiting extends State {
 //
 //                PrintWriter out = new PrintWriter(cli.getOutputStream());
                 out.println("INVITE " + asu.getLocalPort());
-                return new StateDialing(asu);
+                return new StateDialing();
 //            } catch (UnknownHostException e) {
 //                System.err.println("The ip you entered is not correct");
 //            } catch (IOException e) {

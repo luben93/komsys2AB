@@ -21,7 +21,9 @@ class StateTalking extends State {
             String msg = in.readLine();
 
             if (msg.equals("BYE")) {
+                asu.stopStreaming();
                 out.println("200 OK");
+                asu.close();
                 return new StateWaiting();
             }
 
