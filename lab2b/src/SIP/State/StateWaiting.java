@@ -33,14 +33,17 @@ public class StateWaiting extends State {
 
             String msg = in.readLine();
             System.out.println(msg);
-            if (in.readLine().startsWith("INVITE")) {
+            if (msg.startsWith("INVITE")) {
                 int port_peer = Integer.parseInt(msg.substring(7));
                 int port = asu.getLocalPort();
                 out.println("100 TRYING " + port);
+                System.out.println("100");
                 asu.connectTo(ip, port_peer);
                 out.println("180 RINGING");
+                System.out.println("180");
                 asu.startStreaming();
                 out.println("200 OK");
+                System.out.println("200");
                 return new StateAnswer();
             }
             throw new StateException(msg + ", NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");
