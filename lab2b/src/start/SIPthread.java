@@ -15,7 +15,7 @@ public class SIPthread extends Thread {
     private Socket socket;
     private SIPHandler sh;
     private PrintWriter out;
-    private  BufferedReader in;
+    private BufferedReader in;
 
 
     public SIPthread(Socket socket, SIPHandler sh) throws IOException {
@@ -25,13 +25,13 @@ public class SIPthread extends Thread {
 
     public void run() {
         try {
-             out = new PrintWriter(socket.getOutputStream(), true);
+            out = new PrintWriter(socket.getOutputStream(), true);
 
-             in = new BufferedReader(
+            in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
 
             sh.serverReady(in, out, socket.getInetAddress());
-            sh.callAccepted(in,out);
+            sh.callAccepted(in, out);
             System.out.println("Calling ... ");
         } catch (NullPointerException e) {
             sh.forceWaiting();
@@ -40,12 +40,12 @@ public class SIPthread extends Thread {
         }
     }
 
-    public synchronized void hangUp(){
+    public synchronized void hangUp() {
         sh.hangUp(out);
         close();
     }
 
-    public synchronized void close(){
+    public synchronized void close() {
         try {
             out.close();
             in.close();

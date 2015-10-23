@@ -28,7 +28,7 @@ public abstract class State {
         return this;
     }
 
-    public State toTalk(BufferedReader b,PrintWriter p, InetAddress ip) throws StateException {
+    public State toTalk(BufferedReader b, PrintWriter p, InetAddress ip) throws StateException {
         return this;
     }
 
@@ -40,7 +40,7 @@ public abstract class State {
         return this;
     }
 
-    public State toWait(BufferedReader b,PrintWriter p) throws StateException {
+    public State toWait(BufferedReader b, PrintWriter p) throws StateException {
         return this;
     }
 

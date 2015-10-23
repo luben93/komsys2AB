@@ -18,10 +18,10 @@ class StateDialing extends State {
 
 
     @Override
-    public State toTalk(BufferedReader in,PrintWriter out, InetAddress ip) throws StateException {
+    public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip) throws StateException {
         try {
             String msg = in.readLine();
-            if(ip.equals(InetAddress.getLocalHost())){
+            if (ip.equals(InetAddress.getLocalHost())) {
                 throw new StateException("error you cant talk with yourself");
             }
             if (msg.contains("100 TRYING")) {

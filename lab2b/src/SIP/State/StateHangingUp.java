@@ -16,19 +16,20 @@ class StateHangingUp extends State {
     }
 
     @Override
-    public State toWait(BufferedReader in,PrintWriter out) throws StateException {
+    public State toWait(BufferedReader in, PrintWriter out) throws StateException {
         try {
             String msg = in.readLine();
             if (msg.equals("200 OK")) {
                 asu.stopStreaming();
                 asu.close();
                 return new StateWaiting();
-            }else if (msg.equals("BYE")) {
+            } else if (msg.equals("BYE")) {
                 asu.stopStreaming();
                 asu.close();
                 out.println("201 OK");//but its not ok
                 return new StateWaiting();
-            }if (msg.equals("201 OK")) {
+            }
+            if (msg.equals("201 OK")) {
                 asu.stopStreaming();
                 asu.close();
                 return new StateWaiting();

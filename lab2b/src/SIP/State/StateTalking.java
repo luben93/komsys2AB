@@ -16,7 +16,7 @@ class StateTalking extends State {
     }
 
     @Override
-    public State toWait(BufferedReader in,PrintWriter out) throws StateException {
+    public State toWait(BufferedReader in, PrintWriter out) throws StateException {
         try {
             String msg = in.readLine();
 
@@ -35,7 +35,7 @@ class StateTalking extends State {
     }
 
     @Override
-    public State toHangUp(PrintWriter out){
+    public State toHangUp(PrintWriter out) {
         out.println("BYE");
         return new StateHangingUp();
     }

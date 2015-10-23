@@ -26,7 +26,8 @@ public class Interface extends Thread {
         Scanner scanner = new Scanner(System.in);
         Socket s = null;
         String ip = "";
-        PrintWriter out=null;
+        PrintWriter out = null;
+        BufferedReader in = null;
         boolean isClient = false;
 //        SIPthread trad = null;
 
@@ -46,13 +47,13 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
-            if(ip.equals("")){
-                ip=" ";
+            if (ip.equals("")) {
+                ip = " ";
             }
             try {
                 switch (sh.getState()) {
                     case WAITING:
-                        if(ip.equals("0")){
+                        if (ip.equals("0")) {
                             System.exit(0);
                         }
                         try {
@@ -60,12 +61,12 @@ public class Interface extends Thread {
 //                            trad = new SIPthread(s, sh);
 //                            trad.start();
 //                            isClient = true;
-                            BufferedReader in=new BufferedReader(new InputStreamReader(s.getInputStream()));
-                            out=new PrintWriter(s.getOutputStream(),true);
-                            sh.outgoingCall(in,out,s.getInetAddress());
-                            sh.callAccepted(in,out);
+                            in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                            out = new PrintWriter(s.getOutputStream(), true);
+                            sh.outgoingCall(in, out, s.getInetAddress());
+                            sh.callAccepted(in, out);
                             System.out.println("Calling ... ");
-                            isClient=true;
+                            isClient = true;
 //                            System.out.println("press 0 enter to hang up");
 //                            while(!ip.equals("0")){
 //                                ip = scanner.nextLine();
@@ -83,6 +84,9 @@ public class Interface extends Thread {
                             if (isClient) {
                                 sh.hangUp(out);
                                 isClient = false;
+                                out.close();
+                                in.close();
+                                s.close();
                             } else {
                                 server.hangUp();
                             }
@@ -97,10 +101,19 @@ public class Interface extends Thread {
                 System.err.println("wrong selection");
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                    in.close();
+                    s.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } while (true);
     }
-//
+
+    //
     public synchronized void updateServer(SIPthread s) {
         server = s;
     }

@@ -14,14 +14,12 @@ public class main {
     public static void main(String[] args) {
         Socket clientSocket = null;
         ServerSocket serverSocket = null;
+        SIPthread trad = null;
+
         try {
             SIPHandler sh = new SIPHandler();
-            int choice = -1;
-            SIPthread trad = null;
-
             Interface interface_client = new Interface(sh);
             interface_client.start();
-
 
             try {
                 serverSocket = new ServerSocket(4321);
@@ -48,7 +46,8 @@ public class main {
             e.printStackTrace();
         } finally {
             try {
-                clientSocket.close();
+                trad.close();
+                clientSocket.close():
                 serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
