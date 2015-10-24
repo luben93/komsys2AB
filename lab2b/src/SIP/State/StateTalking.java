@@ -33,8 +33,10 @@ class StateTalking extends State {
 
             throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
         } catch (IOException e) {
-            throw new StateException("IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
-
+            System.err.println(e.getMessage()+"IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
+asu.stopStreaming();
+//            throw new StateException("IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
+return new StateWaiting();
         }
     }
 

@@ -80,6 +80,7 @@ public class Interface extends Thread {
                             sh.forceWaiting();
                         }
                 }
+                System.out.println("State: "+sh.getState());
             } catch (NumberFormatException e) {
                 System.err.println("wrong selection");
             } catch (Exception e) {

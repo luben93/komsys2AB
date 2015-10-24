@@ -38,7 +38,10 @@ class StateHangingUp extends State {
             }
             throw new StateException(msg + ", NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
         } catch (IOException e) {
-            throw new StateException("IO error, NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
+            System.err.println(e.getMessage()+"IO error, NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
+                    //throw new StateException("IO error, NOT RECEIVED 200 OK, FROM STATE HANG UP TO STATE WAITING");
+            asu.stopStreaming();
+            return new StateWaiting();
         }
     }
 }
