@@ -26,6 +26,9 @@ class StateTalking extends State {
                 out.println("200 OK");
 //                asu.close();
                 return new StateWaiting();
+            }else if(msg.equals("200 OK")){
+                asu.stopStreaming();
+                return new StateWaiting();
             }
 
             throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");

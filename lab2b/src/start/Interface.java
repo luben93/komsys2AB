@@ -58,8 +58,6 @@ public class Interface extends Thread {
                              trad = new SIPthread(s, sh,false);
                             trad.start();
                             isClient = true;
-                            System.out.println("Calling ... ");
-                            isClient = true;
                         } catch (UnknownHostException e) {
                             System.out.println("The ip you entered is not correct");
                         } catch (IOException e) {

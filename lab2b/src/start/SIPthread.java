@@ -37,7 +37,7 @@ public class SIPthread extends Thread {
                 sh.outgoingCall(in, out,socket.getInetAddress());
             }
             sh.callAccepted(in, out);
-            System.out.println("Calling ... ");
+            System.out.println("press 0 enter to hang up");
         } catch (NullPointerException e) {
             try {
                 sh.forceWaiting();
