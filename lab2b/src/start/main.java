@@ -33,7 +33,7 @@ public class main {
             while (true) {
                 try {
                     clientSocket = serverSocket.accept();
-                    trad = new SIPthread(clientSocket, sh);
+                    trad = new SIPthread(clientSocket, sh,true);
                     trad.start();
                     interface_client.updateServer(trad);
 

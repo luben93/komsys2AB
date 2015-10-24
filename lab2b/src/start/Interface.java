@@ -4,7 +4,6 @@ import SIP.SIPHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -29,11 +28,9 @@ public class Interface extends Thread {
         PrintWriter out = null;
         BufferedReader in = null;
         boolean isClient = false;
-//        SIPthread trad = null;
+        SIPthread trad = null;
 
         do {
-//            Scanner scanner = new Scanner(System.in);
-
             System.out.println("state: " + sh.getState());
             switch (sh.getState()) {
                 case WAITING:
@@ -58,20 +55,11 @@ public class Interface extends Thread {
                         }
                         try {
                             s = new Socket(ip, 4321);
-//                            trad = new SIPthread(s, sh);
-//                            trad.start();
-//                            isClient = true;
-                            in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-                            out = new PrintWriter(s.getOutputStream(), true);
-                            sh.outgoingCall(in, out, s.getInetAddress());
-                            sh.callAccepted(in, out);
+                             trad = new SIPthread(s, sh,false);
+                            trad.start();
+                            isClient = true;
                             System.out.println("Calling ... ");
                             isClient = true;
-//                            System.out.println("press 0 enter to hang up");
-//                            while(!ip.equals("0")){
-//                                ip = scanner.nextLine();
-//                                sh.hangUp(out);
-//                            }
                         } catch (UnknownHostException e) {
                             System.out.println("The ip you entered is not correct");
                         } catch (IOException e) {
@@ -82,10 +70,7 @@ public class Interface extends Thread {
                         if (ip.equals("0")) {
                             System.out.println("You have pressed hang up");
                             if (isClient) {
-                                sh.hangUp(out);
-                                isClient = false;
-                                out.close();
-                                in.close();
+                                trad.hangUp();
                                 s.close();
                             } else {
                                 server.hangUp();
@@ -106,12 +91,7 @@ public class Interface extends Thread {
         } while (true);
     }
 
-    //
     public synchronized void updateServer(SIPthread s) {
         server = s;
     }
-//
-//    public synchronized void showMessage(String msg) {
-//        System.out.println(msg);
-//    }
 }
