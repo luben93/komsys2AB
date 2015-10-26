@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * Created by Julia on 2015-10-13.
@@ -23,20 +25,31 @@ public class StateWaiting extends State {
     public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip,AudioStreamUDP asu) throws StateException {
         try {
 
+            Scanner scanner = new Scanner(System.in);
             String msg = in.readLine();
             System.out.println(msg);
             if (msg.startsWith("INVITE")) {
-                int port_peer = Integer.parseInt(msg.substring(7));
-                int port = asu.getLocalPort();
-                out.println("100 TRYING " + port);
-                System.out.println("100");
-                asu.connectTo(ip, port_peer);
-                out.println("180 RINGING");
-                System.out.println("180");
-                asu.startStreaming();
-                out.println("200 OK");
-                System.out.println("200");
-                return new StateAnswer();
+                System.out.println("You have got an incoming call from " + ip.getHostName() + " do you want to answer? ");
+                System.out.println("y or n ?");
+                String s = scanner.nextLine();
+                if(s.equals("y")){
+                    int port_peer = Integer.parseInt(msg.substring(7));
+                    int port = asu.getLocalPort();
+                    out.println("100 TRYING " + port);
+                    System.out.println("100");
+                    asu.connectTo(ip, port_peer);
+                    out.println("180 RINGING");
+                    System.out.println("180");
+                    asu.startStreaming();
+                    out.println("200 OK");
+                    System.out.println("200");
+                    return new StateAnswer();
+                }else{
+                    in.close();
+                    out.close();
+                    System.out.println("type IP to call\nor 0 to exit");
+                    return new StateWaiting();
+                }
             }
             throw new StateException(msg + ", NOT RECEIVED INVITE, FROM STATE WAITING TO STATE ANSWER");
         } catch (IOException e) {

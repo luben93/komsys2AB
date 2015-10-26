@@ -6,7 +6,10 @@ package start;
 
 import SIP.SIPHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -33,9 +36,16 @@ public class main {
             while (true) {
                 try {
                     clientSocket = serverSocket.accept();
-                    trad = new SIPthread(clientSocket, sh,true);
-                    trad.start();
-                    interface_client.updateServer(trad);
+                    if (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {
+                        trad = new SIPthread(clientSocket, sh, true);
+                        trad.start();
+                        interface_client.updateServer(trad);
+                    } else {
+                        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                        out.println("BUSY");
+                        out.close();
+                        clientSocket.close();
+                    }
 
 //                    interface_client.showMessage("thread started to: " + clientSocket.getInetAddress());
                 } catch (IOException e) {
