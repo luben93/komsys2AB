@@ -19,6 +19,7 @@ class StateTalking extends State {
     @Override
     public State toWait(BufferedReader in, PrintWriter out, AudioStreamUDP asu) throws StateException {
         try {
+            System.out.println(" TOWWWWWWWWWWWWWWWW");
             String msg = in.readLine();
             System.out.println("recieved "+msg);
             if (msg.equals("BYE")) {

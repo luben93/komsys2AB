@@ -37,25 +37,26 @@ public class Interface extends Thread {
                     System.out.println("type IP to call\nor 0 to exit");
                     break;
                 case TALKING:
-                    System.out.println("press 0 enter to hang up");
+                    System.out.println("press 0 enter to hang up ff");
                     break;
                 default:
                     System.out.println("press 0 enter to reset");
                     break;
             }
+            System.out.println(" IP BEFORE ");
             ip = scanner.nextLine();
-
+            System.out.println(" IPPPPP " + ip);
             if (ip.equals("")) {
                 ip = " ";
             }
             try {
                 switch (sh.getState()) {
                     case WAITING:
-
                         if (ip.equals("n")) {
                             server.no();
                         } else if (ip.equals("y")) {
                             server.yes();
+                            System.out.println(" SSSSSSSSSSSSSS + " + sh.getState());
                         }else if (ip.equals("0")) {
                             System.exit(0);
                         }else{
@@ -70,6 +71,10 @@ public class Interface extends Thread {
                                 System.out.println("Could not connect to the ip adress");
                             }
                         }
+
+
+
+                        System.out.println("break loop");
                         break;
                     case TALKING:
                         if (ip.equals("0")) {
@@ -86,6 +91,7 @@ public class Interface extends Thread {
                         if (ip.equals("0")) {
                             sh.forceWaiting();
                         }
+                        break;
                 }
                 System.out.println("State: " + sh.getState());
             } catch (NumberFormatException e) {
@@ -94,7 +100,9 @@ public class Interface extends Thread {
                 e.printStackTrace();
 
             }
-        } while (true);
+        }
+
+        while (true);
     }
 
     public synchronized void updateServer(SIPthread s) {

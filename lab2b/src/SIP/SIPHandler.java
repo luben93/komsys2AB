@@ -60,6 +60,7 @@ public class SIPHandler {
     public void hangUp(PrintWriter p, BufferedReader in) throws StateException {
         System.out.println("to hang up" + currentState.getStateName());
         currentState = currentState.toHangUp(p);
+        System.out.println("Waiting for 200 OK");
         currentState = currentState.toWait(in, p, asu);
     }
 
@@ -89,7 +90,7 @@ public class SIPHandler {
         currentState = currentState.toAnswer(b, p, ip, asu, s);
         System.out.println("to talk");
         currentState = currentState.toTalk(b);
-        currentState = currentState.toWait(b, p, asu);
+       // currentState = currentState.toWait(b, p, asu);
     }
 
 

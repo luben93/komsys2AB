@@ -74,6 +74,7 @@ public class StateWaiting extends State {
             if (msg.startsWith("INVITE")) {
                 System.out.println("You have got an incoming call from " + ip.getHostName() + " do you want to answer? ");
                 System.out.println("y or n ?");
+
                 port_peer = Integer.parseInt(msg.substring(7));
                 port = asu.getLocalPort();
             }

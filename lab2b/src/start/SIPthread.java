@@ -60,7 +60,7 @@ public class SIPthread extends Thread {
         }
     }
 
-    public synchronized void yes() {
+    public void yes() {
         try {
             sh.answer(in, out, socket.getInetAddress(), this);
         } catch (StateException e) {
