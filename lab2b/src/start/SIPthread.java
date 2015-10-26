@@ -1,6 +1,7 @@
 package start;
 
 import SIP.SIPHandler;
+import SIP.State.StateException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,12 +18,13 @@ public class SIPthread extends Thread {
     private PrintWriter out;
     private BufferedReader in;
     private boolean server;
+    public String yesOrNo = "wait";
 
 
-    public SIPthread(Socket socket, SIPHandler sh,boolean server) throws IOException {
+    public SIPthread(Socket socket, SIPHandler sh, boolean server) throws IOException {
         this.sh = sh;
         this.socket = socket;
-        this.server=server;
+        this.server = server;
     }
 
     public void run() {
@@ -31,10 +33,11 @@ public class SIPthread extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            if(server) {
-                sh.serverReady(in, out, socket.getInetAddress());
-            }else{
-                sh.outgoingCall(in, out,socket.getInetAddress());
+            if (server) {
+                sh.serverReady(in, out, socket.getInetAddress(), this);
+            } else {
+                socket.setSoTimeout(2000);
+                sh.outgoingCall(in, out, socket.getInetAddress());
             }
             sh.callAccepted(in, out);
             System.out.println("press 0 enter to hang up");
@@ -45,6 +48,22 @@ public class SIPthread extends Thread {
                 e1.printStackTrace();
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void no() {
+        try {
+            sh.notAnswer(in, out, socket);
+        } catch (StateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void yes() {
+        try {
+            sh.answer(in, out, socket.getInetAddress(), this);
+        } catch (StateException e) {
             e.printStackTrace();
         }
     }

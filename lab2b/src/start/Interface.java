@@ -44,24 +44,31 @@ public class Interface extends Thread {
                     break;
             }
             ip = scanner.nextLine();
+
             if (ip.equals("")) {
                 ip = " ";
             }
             try {
                 switch (sh.getState()) {
                     case WAITING:
-                        if (ip.equals("0")) {
+
+                        if (ip.equals("n")) {
+                            server.no();
+                        } else if (ip.equals("y")) {
+                            server.yes();
+                        }else if (ip.equals("0")) {
                             System.exit(0);
-                        }
-                        try {
-                            s = new Socket(ip, 4321);
-                             trad = new SIPthread(s, sh,false);
-                            trad.start();
-                            isClient = true;
-                        } catch (UnknownHostException e) {
-                            System.out.println("The ip you entered is not correct");
-                        } catch (IOException e) {
-                            System.out.println("Could not connect to the ip adress");
+                        }else{
+                            try {
+                                s = new Socket(ip, 4321);
+                                trad = new SIPthread(s, sh, false);
+                                trad.start();
+                                isClient = true;
+                            } catch (UnknownHostException e) {
+                                System.out.println("The ip you entered is not correct");
+                            } catch (IOException e) {
+                                System.out.println("Could not connect to the ip adress");
+                            }
                         }
                         break;
                     case TALKING:
@@ -80,7 +87,7 @@ public class Interface extends Thread {
                             sh.forceWaiting();
                         }
                 }
-                System.out.println("State: "+sh.getState());
+                System.out.println("State: " + sh.getState());
             } catch (NumberFormatException e) {
                 System.err.println("wrong selection");
             } catch (Exception e) {

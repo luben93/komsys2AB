@@ -3,11 +3,13 @@ package SIP;
 import SIP.State.State;
 import SIP.State.StateException;
 import SIP.State.StateWaiting;
+import start.SIPthread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 
 /**
  * Created by Julia on 2015-10-13.
@@ -46,7 +48,7 @@ public class SIPHandler {
     public void callAccepted(BufferedReader in, PrintWriter out) throws StateException {
 //        currentState=currentState.toTalk(in,out);
         System.out.println("to wait");
-        currentState = currentState.toWait(in, out,asu);
+        currentState = currentState.toWait(in, out, asu);
     }
 
     /*
@@ -66,13 +68,29 @@ public class SIPHandler {
 
     }
 
-    public void serverReady(BufferedReader b, PrintWriter p, InetAddress ip) throws StateException {
+    public void serverReady(BufferedReader b, PrintWriter p, InetAddress ip, SIPthread s) throws StateException {
         System.out.println("to answer");
-        currentState = currentState.toAnswer(b, p, ip,asu);
+        currentState = currentState.toWaitForAnswer(b, p, ip, asu,s);
+       /* System.out.println("to talk");
+        currentState = currentState.toTalk(b);*/
+//        currentState=currentState.toWait(b,p);
+    }
+
+    public void notAnswer(BufferedReader b, PrintWriter p, Socket socket) throws StateException {
+        System.out.println("to not answer");
+        currentState = currentState.toNotAnswer(b, p, socket);
+    }
+
+
+    public void answer(BufferedReader b, PrintWriter p, InetAddress ip, SIPthread s) throws StateException {
+        System.out.println("to answer");
+        currentState = currentState.toAnswer(b, p, ip, asu,s);
         System.out.println("to talk");
         currentState = currentState.toTalk(b);
 //        currentState=currentState.toWait(b,p);
     }
+
+
 
 }
 
