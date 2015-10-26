@@ -32,11 +32,11 @@ public class SIPHandler {
          currentState=currentState.toAnswer(in,out,ip);
      }
  */
-    public void outgoingCall(BufferedReader b, PrintWriter out, InetAddress ip) throws StateException {
+    public void outgoingCall(BufferedReader b, PrintWriter out, InetAddress ip,Socket socket) throws StateException {
         System.out.println("to dial");
         currentState = currentState.toDial(out,asu);
         System.out.println("to talk");
-        currentState = currentState.toTalk(b, out, ip,asu);
+        currentState = currentState.toTalk(b, out, ip,asu,socket);
 //        currentState=currentState.toWait(b,out);
     }
 

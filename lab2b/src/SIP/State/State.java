@@ -35,7 +35,7 @@ public abstract class State {
         return this;
     }
 
-    public State toTalk(BufferedReader b, PrintWriter p, InetAddress ip, AudioStreamUDP asu) throws StateException {
+    public State toTalk(BufferedReader b, PrintWriter p, InetAddress ip, AudioStreamUDP asu, Socket socket) throws StateException {
         return this;
     }
 

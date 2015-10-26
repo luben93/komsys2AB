@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 
 /**
  * Created by Julia on 2015-10-16.
@@ -19,7 +20,7 @@ class StateDialing extends State {
 
 
     @Override
-    public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip, AudioStreamUDP asu) throws StateException {
+    public State toTalk(BufferedReader in, PrintWriter out, InetAddress ip, AudioStreamUDP asu, Socket socket) throws StateException {
         try {
             String msg = in.readLine();
             System.out.println(msg);
@@ -35,8 +36,10 @@ class StateDialing extends State {
 
                     msg = in.readLine();
                     if (msg.equals("200 OK")) {
-                        System.out.println("Press 0 enter to hang up");
+
+                        System.out.println("Press 0 enter to hang up ui");
                         out.println("ACK");
+                        socket.setSoTimeout(100000000);
                         asu.startStreaming();
                         return new StateTalking();
 
