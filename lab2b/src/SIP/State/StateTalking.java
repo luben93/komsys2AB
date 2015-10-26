@@ -20,7 +20,7 @@ class StateTalking extends State {
     public State toWait(BufferedReader in, PrintWriter out, AudioStreamUDP asu) throws StateException {
         try {
             String msg = in.readLine();
-            System.out.println(msg);
+            System.out.println("recieved "+msg);
             if (msg.equals("BYE")) {
                 asu.stopStreaming();
                 out.println("200 OK");
