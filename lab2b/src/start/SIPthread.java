@@ -36,7 +36,7 @@ public class SIPthread extends Thread {
             if (server) {
                 sh.serverReady(in, out, socket.getInetAddress(), this);
             } else {
-                socket.setSoTimeout(2000);
+                socket.setSoTimeout(10000);
                 sh.outgoingCall(in, out, socket.getInetAddress());
             }
             sh.callAccepted(in, out);
