@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 /**
  * Created by luben on 2015-10-13.
@@ -31,6 +32,7 @@ public class SIPthread extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
+            socket.setSoTimeout(10000);//TODO vad händer om socket ger timeout
             if(server) {
                 sh.serverReady(in, out, socket.getInetAddress());
             }else{
@@ -39,6 +41,12 @@ public class SIPthread extends Thread {
             sh.callAccepted(in, out);
             System.out.println("press 0 enter to hang up");
         } catch (NullPointerException e) {
+            try {
+                sh.forceWaiting();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }catch (SocketTimeoutException e2){
             try {
                 sh.forceWaiting();
             } catch (IOException e1) {
