@@ -25,22 +25,21 @@ class StateTalking extends State {
             try {
                 while (true) {
 
-                    try {
-                        msg = in.readLine();
-                    } catch (SocketTimeoutException e) {
+                try {
+                    msg = in.readLine();
+                } catch (SocketTimeoutException e) {
 
-                    }
-                    System.out.println(msg);
-                    if (msg.equals("BYE")) {
-                        asu.stopStreaming();
-                        out.println("200 OK");
-//                asu.close();
-                        return new StateWaiting();
-                    } else if (msg.equals("200 OK")) {
-                        asu.stopStreaming();
-                        return new StateWaiting();
-                    }
                 }
+                if (msg.equals("BYE")) {
+                    asu.stopStreaming();
+                    out.println("200 OK");
+//                asu.close();
+                    return new StateWaiting();
+                } else if (msg.equals("200 OK")) {
+                    asu.stopStreaming();
+                    return new StateWaiting();
+                }
+            }
 //            throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
             }catch (ConnectionResetException e){
                 asu.stopStreaming();
