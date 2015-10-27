@@ -60,6 +60,7 @@ public class SIPthread extends Thread {
             }
         } catch (StateException e) {
             try {
+                out.println("500 ERROR");
                 e.printStackTrace();
                 sh.forceWaiting();
             } catch (IOException e1) {
