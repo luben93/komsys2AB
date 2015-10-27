@@ -1,7 +1,7 @@
 package start;
 
 import SIP.SIPHandler;
-import SIP.test;
+import SIP.waitForBye;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +29,7 @@ public class Interface extends Thread {
         PrintWriter out = null;
         BufferedReader in = null;
         boolean isClient = false;
+        waitForBye t = null;
         SIPthread trad = null;
 
         do {
@@ -57,12 +58,11 @@ public class Interface extends Thread {
                             server.no();
                         } else if (ip.equals("y")) {
                             server.yes();
-                            System.out.println(" SSSSSSSSSSSSSS + " + sh.getState());
-                            test t = new test(sh, server.in, server.out);
-                            t.run();
-                        }else if (ip.equals("0")) {
+                            ///t = new waitForBye(sh, server.in, server.out);
+                            //t.start();
+                        } else if (ip.equals("0")) {
                             System.exit(0);
-                        }else{
+                        } else {
                             try {
                                 s = new Socket(ip, 4322);
                                 trad = new SIPthread(s, sh, false);
@@ -76,7 +76,6 @@ public class Interface extends Thread {
                         }
 
 
-
                         System.out.println("break loop");
                         break;
                     case TALKING:
@@ -86,7 +85,8 @@ public class Interface extends Thread {
                                 trad.hangUp();
                                 s.close();
                             } else {
-                                server.hangUp();
+                                t.hangUp();
+                                //  server.hangUp();
                             }
                         }
                         break;

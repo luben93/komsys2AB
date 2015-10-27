@@ -28,7 +28,9 @@ class StateTalking extends State {
 //                asu.close();
                 return new StateWaiting();
             } else if (msg.equals("200 OK")) {
+                System.out.println(" 200 OK ????????? ");
                 asu.stopStreaming();
+                System.out.println(" STTTOOOOPP ??? ");
                 return new StateWaiting();
             }
 

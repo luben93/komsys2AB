@@ -66,8 +66,6 @@ public class StateWaiting extends State {
     public State toWaitForAnswer(BufferedReader in, PrintWriter out, InetAddress ip, AudioStreamUDP asu, SIPthread server) throws StateException {
 
         try {
-
-            Scanner scanner = new Scanner(System.in);
             String msg = in.readLine();
             System.out.println(msg);
 

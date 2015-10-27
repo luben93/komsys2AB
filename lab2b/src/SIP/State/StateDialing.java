@@ -39,7 +39,7 @@ class StateDialing extends State {
 
                         System.out.println("Press 0 enter to hang up ui");
                         out.println("ACK");
-                        socket.setSoTimeout(100000000);
+                        socket.setSoTimeout(0);
                         asu.startStreaming();
                         return new StateTalking();
 
