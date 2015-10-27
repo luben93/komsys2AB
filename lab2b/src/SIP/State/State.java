@@ -6,6 +6,8 @@ import SIP.SIPHandler;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Created by Julia on 2015-10-13.
@@ -20,11 +22,11 @@ public abstract class State {
 
     public abstract SIPHandler.StateEvent getStateName();
 
-    public State toDial(PrintWriter out,AudioStreamUDP asu) {
+    public State toDial(PrintWriter out,AudioStreamUDP asu){
         return this;
     }
 
-    public State toAnswer(BufferedReader in, PrintWriter out, InetAddress ip,AudioStreamUDP asu) throws StateException {
+    public State toAnswer(BufferedReader in, PrintWriter out, Socket s,AudioStreamUDP asu) throws StateException {
         return this;
     }
 

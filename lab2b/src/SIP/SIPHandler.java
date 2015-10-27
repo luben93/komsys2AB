@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.Socket;
 
 /**
  * Created by Julia on 2015-10-13.
@@ -66,9 +67,9 @@ public class SIPHandler {
 
     }
 
-    public void serverReady(BufferedReader b, PrintWriter p, InetAddress ip) throws StateException {
+    public void serverReady(BufferedReader b, PrintWriter p, Socket s) throws StateException {
         System.out.println("to answer");
-        currentState = currentState.toAnswer(b, p, ip,asu);
+        currentState = currentState.toAnswer(b, p, s, asu);
         System.out.println("to talk");
         currentState = currentState.toTalk(b);
 //        currentState=currentState.toWait(b,p);
