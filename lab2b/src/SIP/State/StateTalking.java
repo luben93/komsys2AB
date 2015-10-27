@@ -2,6 +2,7 @@ package SIP.State;
 
 import SIP.AudioStreamUDP;
 import SIP.SIPHandler;
+import sun.net.ConnectionResetException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,24 +25,27 @@ class StateTalking extends State {
             try {
                 while (true) {
 
-                try {
-                    msg = in.readLine();
-                } catch (SocketTimeoutException e) {
+                    try {
+                        msg = in.readLine();
+                    } catch (SocketTimeoutException e) {
 
-                }
-                System.out.println(msg);
-                if (msg.equals("BYE")) {
-                    asu.stopStreaming();
-                    out.println("200 OK");
+                    }
+                    System.out.println(msg);
+                    if (msg.equals("BYE")) {
+                        asu.stopStreaming();
+                        out.println("200 OK");
 //                asu.close();
-                    return new StateWaiting();
-                } else if (msg.equals("200 OK")) {
-                    asu.stopStreaming();
-                    return new StateWaiting();
+                        return new StateWaiting();
+                    } else if (msg.equals("200 OK")) {
+                        asu.stopStreaming();
+                        return new StateWaiting();
+                    }
                 }
-            }
 //            throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
-        }catch(IOException e){
+            }catch (ConnectionResetException e){
+                asu.stopStreaming();
+                return new StateWaiting();
+            }catch(IOException e){
             System.err.println(e.getMessage() + "IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
             asu.stopStreaming();
 //            throw new StateException("IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
