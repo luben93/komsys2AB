@@ -22,9 +22,9 @@ public class main {
             interface_client.start();
 
             try {
-                serverSocket = new ServerSocket(4321);
+                serverSocket = new ServerSocket(4322);
             } catch (IOException e) {
-                System.err.println("Could not listen on port: " + 4321);
+                System.err.println("Could not listen on port: " + 4322);
                 System.exit(1);
             }
 
