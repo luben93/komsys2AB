@@ -21,18 +21,18 @@ public class SIPthread extends Thread {
     private boolean server;
 
 
-    public SIPthread(Socket socket, SIPHandler sh, boolean server) throws IOException {
+    public SIPthread(Socket socket, SIPHandler sh,boolean server) throws IOException {
         this.sh = sh;
         this.socket = socket;
-        this.server = server;
+        this.server=server;
     }
 
     public void run() {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
+
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-
             socket.setSoTimeout(10000);//TODO vad händer om socket ger timeout
             if (server) {
                 if (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {
@@ -46,15 +46,13 @@ public class SIPthread extends Thread {
             }
             sh.callAccepted(in, out);
             System.out.println("press 0 enter to hang up");
-
-
         } catch (NullPointerException e) {
             try {
                 sh.forceWaiting();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        } catch (SocketTimeoutException e2) {
+        }catch (SocketTimeoutException e2){
             try {
                 sh.forceWaiting();
             } catch (IOException e1) {
