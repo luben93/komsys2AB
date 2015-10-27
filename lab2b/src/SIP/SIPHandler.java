@@ -48,7 +48,7 @@ public class SIPHandler {
     */
     public void callAccepted(BufferedReader in, PrintWriter out) throws StateException {
 //        currentState=currentState.toTalk(in,out);
-        System.out.println("to wait");
+        System.out.println("to wait hhhhhhhhhhjhjhk" +in);
         currentState = currentState.toWait(in, out, asu);
     }
 

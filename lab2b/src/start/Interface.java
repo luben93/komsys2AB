@@ -1,6 +1,7 @@
 package start;
 
 import SIP.SIPHandler;
+import SIP.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,11 +58,13 @@ public class Interface extends Thread {
                         } else if (ip.equals("y")) {
                             server.yes();
                             System.out.println(" SSSSSSSSSSSSSS + " + sh.getState());
+                            test t = new test(sh, server.in, server.out);
+                            t.run();
                         }else if (ip.equals("0")) {
                             System.exit(0);
                         }else{
                             try {
-                                s = new Socket(ip, 4321);
+                                s = new Socket(ip, 4322);
                                 trad = new SIPthread(s, sh, false);
                                 trad.start();
                                 isClient = true;

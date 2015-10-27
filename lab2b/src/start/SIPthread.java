@@ -15,8 +15,8 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private SIPHandler sh;
-    private PrintWriter out;
-    private BufferedReader in;
+    public PrintWriter out;
+    public BufferedReader in;
     private boolean server;
     public String yesOrNo = "wait";
 
@@ -39,7 +39,7 @@ public class SIPthread extends Thread {
                 socket.setSoTimeout(10000);
                 sh.outgoingCall(in, out, socket.getInetAddress(),socket);
             }
-            sh.callAccepted(in, out);
+
             System.out.println("press 0 enter to hang up");
         } catch (NullPointerException e) {
             try {
