@@ -55,9 +55,10 @@ public class SIPHandler {
             currentState=currentState.toWait(b);
         }
     */
-    public void hangUp(PrintWriter p) {
+    public void hangUp(PrintWriter p, BufferedReader in) throws StateException {
         System.out.println("to hang up");
         currentState = currentState.toHangUp(p);
+        currentState = currentState.toWait(in,p,asu);
     }
 
     public void forceWaiting() throws IOException {

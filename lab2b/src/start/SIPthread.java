@@ -1,6 +1,7 @@
 package start;
 
 import SIP.SIPHandler;
+import SIP.State.StateException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,7 +66,11 @@ public class SIPthread extends Thread {
     }
 
     public synchronized void hangUp() {
-        sh.hangUp(out);
+        try {
+            sh.hangUp(out,in);
+        } catch (StateException e) {
+            e.printStackTrace();
+        }
         close();
     }
 
