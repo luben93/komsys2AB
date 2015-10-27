@@ -39,7 +39,7 @@ public class SIPthread extends Thread {
                     sh.serverReady(in, out, socket);
                 } else {
                     out.println("BUSY");
-                    close();
+                //    close();
                 }
             } else {
                 sh.outgoingCall(in, out, socket.getInetAddress());

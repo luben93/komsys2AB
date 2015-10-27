@@ -42,6 +42,9 @@ class StateDialing extends State {
 
                     }
                 }
+            }else if(msg.equals("BUSY")){
+
+                return new StateWaiting();
             }
             throw new StateException(msg + " TRO failed");
 
