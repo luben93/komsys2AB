@@ -43,6 +43,7 @@ class StateTalking extends State {
 
     @Override
     public State toHangUp(PrintWriter out) {
+        System.out.println(" BYYYYYYYYYYYYYE");
         out.println("BYE");
         return new StateHangingUp();
     }

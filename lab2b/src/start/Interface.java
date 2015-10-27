@@ -61,7 +61,7 @@ public class Interface extends Thread {
                             System.exit(0);
                         }else{
                             try {
-                                s = new Socket(ip, 4321);
+                                s = new Socket(ip, 4322);
                                 trad = new SIPthread(s, sh, false);
                                 trad.start();
                                 isClient = true;
