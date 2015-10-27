@@ -21,15 +21,14 @@ class StateTalking extends State {
     public State toWait(BufferedReader in, PrintWriter out, AudioStreamUDP asu) throws StateException {
         String msg = "";
 
-            try {
-                while (true) {
+        try {
+            while (true) {
 
                 try {
                     msg = in.readLine();
                 } catch (SocketTimeoutException e) {
 
                 }
-                System.out.println(msg);
                 if (msg.equals("BYE")) {
                     asu.stopStreaming();
                     out.println("200 OK");
@@ -41,7 +40,7 @@ class StateTalking extends State {
                 }
             }
 //            throw new StateException(msg + ", NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
-        }catch(IOException e){
+        } catch (IOException e) {
             System.err.println(e.getMessage() + "IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");
             asu.stopStreaming();
 //            throw new StateException("IO execp, NOT RECEIVED BYE, FROM STATE TALKING TO STATE WAITING");

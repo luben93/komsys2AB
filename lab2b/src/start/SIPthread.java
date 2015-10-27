@@ -33,7 +33,7 @@ public class SIPthread extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            socket.setSoTimeout(10000);//TODO vad händer om socket ger timeout
+            socket.setSoTimeout(1000);//TODO vad händer om socket ger timeout
             if (server) {
                 if (sh.getState().equals(SIPHandler.StateEvent.WAITING)) {
                     sh.serverReady(in, out, socket);
