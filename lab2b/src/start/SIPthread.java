@@ -15,8 +15,8 @@ import java.net.Socket;
 public class SIPthread extends Thread {
     private Socket socket;
     private SIPHandler sh;
-    private PrintWriter out;
-    private BufferedReader in;
+    public PrintWriter out;
+    public BufferedReader in;
     private boolean server;
     public String yesOrNo = "wait";
 
