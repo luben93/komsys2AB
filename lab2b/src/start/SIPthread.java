@@ -21,10 +21,10 @@ public class SIPthread extends Thread {
     private boolean server;
 
 
-    public SIPthread(Socket socket, SIPHandler sh,boolean server) throws IOException {
+    public SIPthread(Socket socket, SIPHandler sh, boolean server) throws IOException {
         this.sh = sh;
         this.socket = socket;
-        this.server=server;
+        this.server = server;
     }
 
     public void run() {
@@ -39,7 +39,7 @@ public class SIPthread extends Thread {
                     sh.serverReady(in, out, socket);
                 } else {
                     out.println("BUSY");
-                //    close();
+                    //    close();
                 }
             } else {
                 sh.outgoingCall(in, out, socket.getInetAddress());
@@ -52,8 +52,15 @@ public class SIPthread extends Thread {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        }catch (SocketTimeoutException e2){
+        } catch (SocketTimeoutException e2) {
             try {
+                sh.forceWaiting();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        } catch (StateException e) {
+            try {
+                e.printStackTrace();
                 sh.forceWaiting();
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -65,7 +72,7 @@ public class SIPthread extends Thread {
 
     public synchronized void hangUp() {
         try {
-            sh.hangUp(out,in);
+            sh.hangUp(out, in);
         } catch (StateException e) {
             e.printStackTrace();
         }
